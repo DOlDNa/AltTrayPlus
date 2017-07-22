@@ -1,7 +1,7 @@
 # AltTray Plus β
 [PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP を追加したオルタナ版のメールチェッカー。
 
-ブラウザから一覧して、いらないメールをまとめて削除。新着メールはポップアップで通知します。
+ブラウザで一覧。読んだメールはまとめて削除。新着メールはポップアップで通知します。
 
 # 使い方
 
@@ -21,6 +21,6 @@ AltTrayPlus フォルダ内に .poptrayrc を作成し、以下の例を参考�
     passwd="xxxxxxxx"
     protocol=POP3 SSL
   
-[account○]の数字は、複数アカウントがある場合に連番にして下さい。
+[account○]の数字は、アカウントを追加する場合に連番になるよう加算して下さい。
 
 passwd は、端末などで base64 エンコードする必要があります。例：`echo xxxxxxxx | base64`
