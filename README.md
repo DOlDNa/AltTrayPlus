@@ -21,6 +21,6 @@ AltTrayPlus フォルダ内に .poptrayrc を作成し、以下の例を参考�
     passwd="xxxxxxxx"
     protocol=POP3 SSL
   
-[account○]の数字は、アカウントを追加する場合に連番になるよう加算して下さい。
+[account○]の数字は、複数のアカウントを追加する場合に連番になるように加算して下さい。
 
 passwd は、端末などで base64 エンコードする必要があります。例：`echo xxxxxxxx | base64`
