@@ -1,8 +1,8 @@
 # AltTray Plus β
 
-[PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP をプラスしたオルタナ版のメールチェッカー。
+[PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP をプラスしたオルタナ版メールチェッカー
 
-ブラウザでチェック → ポップアップでお知らせ → 読んだメール＆いらないメールはまとめて削除。
+ブラウザからチェック → ポップアップでお知らせ → 読んだメール＆いらないメールはまとめて削除
 
 
 ---------------------------------------
@@ -10,11 +10,9 @@
 
 ## 使い方
 
-
 ### 1 .poptrayrc がある場合
 
 AltTrayPlus フォルダ内に .poptrayrc を配置
-
 
 ### 2 .poptrayrc がない場合
 
@@ -38,7 +36,6 @@ AltTrayPlus フォルダ内に .poptrayrc を作成し、以下のように入�
 
 ## 問題点
 
-
 ### 遅い
 
 * アカウントが複数ある場合、表示に時間が掛かる
@@ -46,7 +43,6 @@ AltTrayPlus フォルダ内に .poptrayrc を作成し、以下のように入�
     
 * メール削除を実行した後、再取得を経てからリダイレクトを行うため時間が掛かる
     * `imap_open` → `imap_expunge` → `imap_open` → `location.replace` → `imap_open`
-
 
 ### interval と black list が未実装
 
