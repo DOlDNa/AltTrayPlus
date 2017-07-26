@@ -89,17 +89,17 @@ ob_implicit_flush( true );
                                     $headerinfo = imap_headerinfo( $imap, $j );
                                     if ( isset( $headerinfo -> subject ) )
                                     {
-                                        if ( preg_match( '/\?(.*?)\?/i', $headerinfo -> subject, $headercharset ) )
+                                        if ( stripos( $headerinfo -> subject, '=?' ) !== false )
                                             $subject = mb_decode_mimeheader( trim( $headerinfo -> subject ) );
                                         else
                                             $subject = trim( $headerinfo -> subject );
                                         $subject = h( str_replace( array( '/', ':', '!', '?', '&' ), '-', $subject ) );
                                         if ( isset( $headerinfo -> from[0] -> personal ) )
-                                            $personal = isset( $headercharset[1] ) ? h( mb_decode_mimeheader( $headerinfo -> from[0] -> personal ) ) : h( $headerinfo -> from[0] -> personal );
+                                            $personal = stripos( $headerinfo -> from[0] -> personal, '=?' ) !== false ? h( mb_decode_mimeheader( $headerinfo -> from[0] -> personal ) ) : h( $headerinfo -> from[0] -> personal );
                                         else
                                             $personal = h( $headerinfo -> from[0] -> mailbox ) . '@' . h( $headerinfo -> from[0] -> host );
                                         $header = str_replace( "\r\n", '&#10;', h( imap_fetchbody( $imap, $j, 0 ) ) );
-                                        if ( stripos( $header, ' =?' ) !== false )
+                                        if ( stripos( $header, '=?' ) !== false )
                                             $header = mb_decode_mimeheader( $header );
                                         $structure = imap_fetchstructure( $imap, $j );
                                         if ( $structure -> parameters[0] -> attribute === 'CHARSET' )
@@ -127,7 +127,7 @@ ob_implicit_flush( true );
                                         '                            <a class=text-white href="#col', $i, '-', $j, '" onclick="$(this).attr(\'download\',\'', $subject, '.txt\').attr(\'href\',\'data:application/octet-stream,\'+encodeURIComponent($(\'#d', $i, '-', $j, '\').text()))">保存</a>', $n,
                                         '                        </td>', $n,
                                         '                        <td class=align-middle>', $personal, ' &lt;', h( $headerinfo -> from[0] -> mailbox ), '@', h( $headerinfo -> from[0] -> host ), '&gt;</td>', $n,
-                                        '                        <td class=align-middle>', ( isset( $headerinfo -> toaddress ) ? isset( $headercharset[1] ) ? h( mb_decode_mimeheader( $headerinfo -> toaddress ) ) : h( $headerinfo -> toaddress ) : 'Undisclosed-Recipients:;' ), '</td>', $n,
+                                        '                        <td class=align-middle>', ( isset( $headerinfo -> toaddress ) ? stripos( $headerinfo -> toaddress, '=?' ) !== false ? h( mb_decode_mimeheader( $headerinfo -> toaddress ) ) : h( $headerinfo -> toaddress ) : 'Undisclosed-Recipients:;' ), '</td>', $n,
                                         '                        <td class=align-middle>', date( 'Y/n/j H:i:s', strtotime( $headerinfo -> Date ) ), '</td>', $n,
                                         '                        <td class="text-center align-middle">', s( $headerinfo -> Size ), '</td>', $n,
                                         '                        <td class=align-middle>', $subject, ( $attachment > 0 ? ' <small><sup class="badge badge-pill badge-info">添付x' . $attachment . '</sup></small>' : '' ), '</td>', $n,
@@ -183,7 +183,7 @@ ob_implicit_flush( true );
                 if ( $delete )
                     exit( '<script>location.replace("./")</script><meta http-equiv=refresh content="0;URL=./?d">' );
                 ?>
-                <footer class=text-right><small class="badge badge-pill badge-primary"><a class=text-white href=./License.html>© <?=date( 'Y' )?> がりはり</a></small></footer>
+                <footer class=text-right><small class="badge badge-pill badge-primary"><a class=text-white href=./License.html>© <?=date( 'Y' )?> AltTray Plus</a></small></footer>
             </div>
         </form><?=$total > 0 ? '
         <script>d.title="' . $total . '件受信 - AltTray Plus β";Notification.requestPermission(function(permission){if(permission==="granted"){' . $notify . '}})</script>' . $n : $n?>
