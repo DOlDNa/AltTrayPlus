@@ -1,4 +1,4 @@
-# <img src="./icon.png"> AltTray Plus β
+# <img src="./icon.png" alt=alt> AltTray Plus β
 
 [PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP をプラスしたオルタナ版メールチェッカー
 
