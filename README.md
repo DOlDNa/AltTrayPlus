@@ -36,8 +36,8 @@ AltTrayPlus フォルダ内に .poptrayrc を作成し、以下のように入�
 
 ## 動作＆推奨環境
 
-### XAMPP for Linux 5.6.x, 7.x
-
+* XAMPP for Linux 5.6.x, 7.x
+* Notifications API 対応ブラウザ
 
 ---------------------------------------
 
