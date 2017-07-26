@@ -1,8 +1,8 @@
 # AltTray Plus β
 
-[PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP を**プラス**したオルタナ版のメールチェッカー。
+[PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP をプラスしたオルタナ版のメールチェッカー。
 
-ブラウザでチェック → 新着メールをポップアップでお知らせ → 読んだメール＆いらないメールはまとめて削除。
+ブラウザでチェック → ポップアップでお知らせ → 読んだメール＆いらないメールはまとめて削除。
 
 
 ---------------------------------------
