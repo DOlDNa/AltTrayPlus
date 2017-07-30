@@ -55,6 +55,6 @@
 
 ### interval と black list が未実装
 
-* interval は Refresh で代替した
+* interval は `Refresh` で代替した
 
 * black list は迷惑メールブロックサービスの利用を推奨
