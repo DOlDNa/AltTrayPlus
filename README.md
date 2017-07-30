@@ -12,11 +12,13 @@
 
 ### 1 .poptrayrc がある場合
 
-AltTrayPlus フォルダ内に .poptrayrc を配置
+* AltTrayPlus フォルダ内に .poptrayrc を配置
 
 ### 2 .poptrayrc がない場合
 
-AltTrayPlus フォルダ内に .poptrayrc を作成し、以下のように入力して下さい
+* AltTrayPlus フォルダ内にテキストファイルを作成
+* 下記コードを参考に入力
+* ファイル名を .poptrayrc にリネーム
 
     [account0]
     name=Yourname
@@ -34,10 +36,10 @@ AltTrayPlus フォルダ内に .poptrayrc を作成し、以下のように入�
 ---------------------------------------
 
 
-## 動作＆推奨環境
+## 動作および推奨環境
 
-* XAMPP for Linux 5.6.x, 7.x
-* Notifications API 対応ブラウザ
+* XAMPP for Linux 5.6.x および 7.x
+* Web Notifications API 対応ブラウザ
 
 ---------------------------------------
 
@@ -46,7 +48,7 @@ AltTrayPlus フォルダ内に .poptrayrc を作成し、以下のように入�
 
 ### 遅い
 
-* アカウントが複数ある場合、表示に時間が掛かる
+* 多数のアカウントを設定した場合、一覧が表示されるまでに時間が掛かる
     * 1アカウント ≒ 1秒
     
 * メール削除を実行した後、再取得を経てからリダイレクトを行うため時間が掛かる
@@ -54,6 +56,6 @@ AltTrayPlus フォルダ内に .poptrayrc を作成し、以下のように入�
 
 ### interval と black list が未実装
 
-* interval は Refresh で代替
+* interval は Refresh で代替した
 
 * black list は迷惑メールブロックサービスの利用を推奨
