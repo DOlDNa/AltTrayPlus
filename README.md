@@ -17,8 +17,7 @@
 ### 2 .poptrayrc がない場合
 
 * AltTrayPlus フォルダ内にテキストファイルを作成
-* 下記コードを参考に入力
-* ファイル名を .poptrayrc にリネーム
+* 下記コードを参考に入力して、ファイル名を .poptrayrc にリネーム
 
         [account0]
         name=Yourname
