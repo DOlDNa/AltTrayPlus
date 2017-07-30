@@ -46,7 +46,7 @@ ob_implicit_flush( true );
     </head>
     <body>
         <form method=post>
-            <script>var d=document,div=d.createElement("div");d.getElementsByTagName("form")[0].style.display="none";div.setAttribute("id","loading-bg");d.body.appendChild(div);div.innerHTML="<d"+"iv id=loading><i>読<\/i><i>み<\/i><i>込<\/i><i>み<\/i><i>中<\/i><\/d"+"iv>"</script><?php ob_flush();echo $n?>
+            <script>var d=document,div=d.createElement("div"),n=Notification;d.getElementsByTagName("form")[0].style.display="none";div.setAttribute("id","loading-bg");d.body.appendChild(div);div.innerHTML="<d"+"iv id=loading><i>読<\/i><i>み<\/i><i>込<\/i><i>み<\/i><i>中<\/i><\/d"+"iv>"</script><?php ob_flush();echo $n?>
             <nav class="navbar navbar-inverse bg-danger fixed-top">
                 <div class=form-inline>
                     <span class=navbar-brand>AltTray Plus <small><sup class="badge badge-pill badge-info">β</sup></small></span><?=file_exists( $rc = '.poptrayrc' ) && is_file( $rc ) && is_readable( $rc ) ? '
@@ -70,7 +70,7 @@ ob_implicit_flush( true );
                             $d = imap_num_msg( $imap );
                             if ( $d > 0 )
                             {
-                                $notify .= 'new Notification("' . h( $ini['account'.$i]['name'] ) . '",{icon:"./icon.png",body:"新着メールが' . $d . '件あります。"});';
+                                $notify .= 'new n("' . h( $ini['account'.$i]['name'] ) . '",{icon:"./icon.png",body:"新着メールが' . $d . '件あります。"});';
                                 echo
                                 '                <table class="table table-bordered table-hover table-inverse">', $n,
                                 '                    <tr><th colspan=7 class="h5 bg-primary">', h( $ini['account' . $i]['name'] ), ' <small><sup class="badge badge-pill badge-info">', $d, '</sup></small></th></tr>', $n,
@@ -186,7 +186,7 @@ ob_implicit_flush( true );
                 <footer class=text-right><small class="badge badge-pill badge-primary"><a class=text-white href=./License.html>© <?=date( 'Y' )?> AltTray Plus</a></small></footer>
             </div>
         </form><?=$total > 0 ? '
-        <script>d.title="' . $total . '件受信 - AltTray Plus β";Notification.requestPermission(function(permission){if(permission==="granted"){' . $notify . '}})</script>' . $n : $n?>
+        <script>d.title="' . $total . '件受信 - AltTray Plus β";n.requestPermission(function(p){if(p==="granted"){' . $notify . '}})</script>' . $n : $n?>
         <script src=js/></script>
     </body>
 </html>
