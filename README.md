@@ -20,13 +20,13 @@
 * 下記コードを参考に入力
 * ファイル名を .poptrayrc にリネーム
 
-    [account0]
-    name=Yourname
-    host=mail.yoursever.com
-    port=995
-    user=yourmail@yoursever.com
-    passwd="xxxxxxxx"
-    protocol=POP3 SSL
+        [account0]
+        name=Yourname
+        host=mail.yoursever.com
+        port=995
+        user=yourmail@yoursever.com
+        passwd="xxxxxxxx"
+        protocol=POP3 SSL
 
 * [account○]の数字は、複数のアカウントを追加する場合に連番となります
 * passwd は、端末などで base64 エンコードする必要があります
