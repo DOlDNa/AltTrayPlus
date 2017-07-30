@@ -1,8 +1,10 @@
 # <img src="./icon.png" alt=alt> AltTray Plus β
 
-[PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP をプラスしたオルタナ版メールチェッカー
+[PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP をプラスした PHP 版のメールチェッカー
 
 ブラウザからチェック → ポップアップでお知らせ → 読んだメール＆いらないメールはまとめて削除
+
+ヘッダーと本文のみプレビュー表示できる
 
 
 ---------------------------------------
