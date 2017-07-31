@@ -60,3 +60,11 @@
 * interval は `Refresh` で代替した
 
 * black list は迷惑メールブロックサービスの利用を推奨
+
+
+---------------------------------------
+
+
+## 謝辞
+
+本ソフトウェアは、PopTray Minus の設定ファイルである .poptrayrc を借用し、Bootstrap および jQuery を使用した。
