@@ -1,10 +1,10 @@
 # <img src="./icon.png" alt=alt> AltTray Plus β
 
-[PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP をプラスした PHP 版のメールチェッカー
+[PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP を追加した PHP 版のメールチェッカー
 
 ブラウザからチェック → ポップアップでお知らせ → 読んだメール＆いらないメールはまとめて削除
 
-ヘッダーと本文のみプレビュー表示できるので偽装メールやウィルスメール対策にも最適
+ヘッダーと本文のみをプレビュー表示できるので「偽装メール」や「ウィルスメール」対策にも最適
 
 
 ---------------------------------------
@@ -19,7 +19,7 @@
 ### 2 .poptrayrc がない場合
 
 * AltTrayPlus フォルダ内にテキストファイルを作成
-* 下記コードを参考に入力し、ファイル名を .poptrayrc にリネーム
+* 下記を参考に入力し、ファイル名を .poptrayrc にリネーム
 
         [account0]
         name=Yourname
