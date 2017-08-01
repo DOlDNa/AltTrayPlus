@@ -10,13 +10,24 @@
 ---------------------------------------
 
 
-## 使い方
+## 動作および推奨環境
 
-### 1 .poptrayrc がある場合
+* XAMPP for Linux 5.6.x、7.x
+* Web Notifications API 対応ブラウザ
+
+
+---------------------------------------
+
+
+## 使い方
+PopTray Minus ユーザーは「.poptrayrc がある場合」を、
+そうでない方は「.poptrayrc がない場合」を参照して下さい。
+
+### .poptrayrc がある場合
 
 * AltTrayPlus フォルダ内に .poptrayrc を配置
 
-### 2 .poptrayrc がない場合
+### .poptrayrc がない場合
 
 * AltTrayPlus フォルダ内にテキストファイルを作成
 * 下記を参考に入力し、ファイル名を .poptrayrc にリネーム
@@ -33,14 +44,6 @@
 * passwd は、端末などで base64 エンコードする必要があります
     * 例：`echo xxxxxxxx | base64`
 
-
----------------------------------------
-
-
-## 動作および推奨環境
-
-* XAMPP for Linux 5.6.x および 7.x
-* Web Notifications API 対応ブラウザ
 
 ---------------------------------------
 
