@@ -7,14 +7,14 @@ FileETag None
 AddOutputFilterByType DEFLATE text/html text/css text/javascript application/x-javascript application/x-httpd-php
 </ifModule>
 <IfModule mod_headers.c>
+Header unset ETag
 Header set X-Frame-Options SAMEORIGIN
 Header set X-Content-Type-Options "nosniff"
 Header set X-XSS-Protection "1; mode=block"
 <FilesMatch "\.(html|php)$">
+Header set X-Powered-By "AltTrayPlus/1.0"
 Header append Author "Gari-Hari LLC."
 </FilesMatch>
-Header unset X-Powered-By
-Header unset ETag
 <FilesMatch "\.(css|js|map|png|svg)$">
 ExpiresActive On
 ExpiresDefault "access plus 1 weeks"
