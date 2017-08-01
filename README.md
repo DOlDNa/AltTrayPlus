@@ -1,7 +1,5 @@
 # <img src="./icon.png" alt=alt> AltTray Plus β
 
-[PopTray Minus](http://server-pro.com/poptrayminus/) に IMAP を追加した PHP 版のメールチェッカー
-
 ブラウザからチェック → ポップアップでお知らせ → 読んだメール＆いらないメールはまとめて削除
 
 ヘッダーと本文のみをプレビュー表示できるので「偽装メール」や「ウィルスメール」対策にも最適
@@ -20,8 +18,7 @@
 
 
 ## 使い方
-PopTray Minus ユーザーは「.poptrayrc がある場合」を、
-そうでない方は「.poptrayrc がない場合」を参照して下さい。
+PopTray Minus ユーザーは「.poptrayrc がある場合」を、そうでない方は「.poptrayrc がない場合」を参照して下さい。
 
 ### .poptrayrc がある場合
 
@@ -70,4 +67,4 @@ PopTray Minus ユーザーは「.poptrayrc がある場合」を、
 
 ## 謝辞
 
-本ソフトウェアは、PopTray Minus の設定ファイルである .poptrayrc を借用し、Bootstrap および jQuery を使用した。
+本ソフトウェアは、[PopTray Minus](http://server-pro.com/poptrayminus/) の設定ファイルである .poptrayrc を借用し、[Bootstrap](http://v4-alpha.getbootstrap.com/) および [jQuery](http://jquery.com/) を使用した。
