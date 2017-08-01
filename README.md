@@ -18,7 +18,7 @@
 
 
 ## 使い方
-PopTray Minus ユーザーは「.poptrayrc がある場合」を、そうでない方は「.poptrayrc がない場合」を参照して下さい。
+PopTray Minus ユーザーは「[.poptrayrc がある場合](https://github.com/DOlDNa/AltTrayPlus/blob/master/README.md#poptrayrc-がある場合)」を、そうでない方は「[.poptrayrc がない場合](https://github.com/DOlDNa/AltTrayPlus/blob/master/README.md#poptrayrc-がない場合)」を参照して下さい。
 
 ### .poptrayrc がある場合
 
