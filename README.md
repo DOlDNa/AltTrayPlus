@@ -2,7 +2,7 @@
 
 ブラウザからチェック → ポップアップでお知らせ → 読んだメール＆いらないメールはまとめて削除
 
-ヘッダーと本文のみをプレビュー表示できるので「偽装メール」や「ウィルスメール」対策にも最適
+ヘッダと本文のみをプレビューできるので「偽装メール」や「ウィルスメール」対策にも最適
 
 
 ---------------------------------------
@@ -18,6 +18,7 @@
 
 
 ## 使い方
+
 PopTray Minus ユーザーは「[.poptrayrc がある場合](https://github.com/DOlDNa/AltTrayPlus/blob/master/README.md#poptrayrc-がある場合)」を、そうでない方は「[.poptrayrc がない場合](https://github.com/DOlDNa/AltTrayPlus/blob/master/README.md#poptrayrc-がない場合)」を参照して下さい。
 
 ### .poptrayrc がある場合
