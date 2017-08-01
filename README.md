@@ -23,7 +23,7 @@ PopTray Minus ユーザーは「[.poptrayrc がある場合](https://github.com/
 
 ### .poptrayrc がある場合
 
-* AltTrayPlus フォルダ内に .poptrayrc を配置
+1. AltTrayPlus フォルダ内に .poptrayrc を配置
 
 ### .poptrayrc がない場合
 
