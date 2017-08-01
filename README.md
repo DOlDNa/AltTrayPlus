@@ -27,8 +27,8 @@ PopTray Minus ユーザーは「[.poptrayrc がある場合](https://github.com/
 
 ### .poptrayrc がない場合
 
-* AltTrayPlus フォルダ内にテキストファイルを作成
-* 下記を参考に入力し、ファイル名を .poptrayrc にリネーム
+1. AltTrayPlus フォルダ内にテキストファイルを作成
+2. 下記を参考に入力し、ファイル名を .poptrayrc にリネーム
 
         [account0]
         name=Yourname
@@ -40,7 +40,8 @@ PopTray Minus ユーザーは「[.poptrayrc がある場合](https://github.com/
 
 * [account○]の数字は、複数のアカウントを追加する場合に連番となります
 * passwd は、端末などで base64 エンコードする必要があります
-    * 例：`echo xxxxxxxx | base64`
+    1. 端末：`echo xxxxxxxx | base64`
+    2. PHP：`<?=base64_encode('xxxxxxxx');`
 
 
 ---------------------------------------
