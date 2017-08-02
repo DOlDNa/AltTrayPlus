@@ -41,8 +41,8 @@ PopTray Minus ユーザーは「[.poptrayrc がある場合](#poptrayrc-があ�
 
         # [account○]の数字は、複数のアカウントを追加する場合に連番となります
         # passwd は、端末などで base64 エンコードする必要があります
-        #  ・端末：`echo xxxxxxxx | base64`
-        #  ・PHP：`<?=base64_encode('xxxxxxxx');`
+        #  ・端末：echo xxxxxxxx | base64
+        #  ・PHP：<?=base64_encode('xxxxxxxx');
 
 
 ---------------------------------------
