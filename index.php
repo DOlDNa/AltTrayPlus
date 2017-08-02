@@ -2,6 +2,7 @@
 header( 'Refresh: 900' );
 header( 'Pragma: no-cache' );
 date_default_timezone_set( 'Asia/Tokyo' );
+error_reporting( E_ERROR );
 $n = PHP_EOL;
 $blk = $col = $total = $last_error = $notify = null;
 $delete = filter_input( INPUT_POST, 'delete', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY );
@@ -46,7 +47,7 @@ ob_implicit_flush( true );
     </head>
     <body>
         <form method=post>
-            <script>var d=document,div=d.createElement("div"),n=Notification;d.getElementsByTagName("form")[0].style.display="none";div.setAttribute("id","loading-bg");d.body.appendChild(div);div.innerHTML="<d"+"iv id=loading><i>読<\/i><i>み<\/i><i>込<\/i><i>み<\/i><i>中<\/i><\/d"+"iv>"</script><?php ob_flush();echo $n?>
+            <script>var d=document,div=d.createElement("div"),f=d.getElementsByTagName("form")[0],n=Notification;f.style.display="none";div.setAttribute("id","loading-bg");d.body.appendChild(div);div.innerHTML="<d"+"iv id=loading><i>読<\/i><i>み<\/i><i>込<\/i><i>み<\/i><i>中<\/i><\/d"+"iv>";setTimeout(function(){div.innerHTML="<d"+"iv id=loading><i>タイムアウトしました<\/i><i>リロードして下さい<\/i><\/d"+"iv>"},60000)</script><?php ob_flush();echo $n?>
             <nav class="navbar navbar-inverse bg-danger fixed-top">
                 <div class=form-inline>
                     <span class=navbar-brand>AltTray Plus <small><sup class="badge badge-pill badge-info">β</sup></small></span><?=file_exists( $rc = '.poptrayrc' ) && is_file( $rc ) && is_readable( $rc ) ? '
