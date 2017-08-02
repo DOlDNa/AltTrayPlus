@@ -39,10 +39,10 @@ PopTray Minus ユーザーは「[.poptrayrc がある場合](#poptrayrc-があ�
         passwd="xxxxxxxx"
         protocol=POP3 SSL
 
-* [account○]の数字は、複数のアカウントを追加する場合に連番となります
-* passwd は、端末などで base64 エンコードする必要があります
-    1. 端末：`echo xxxxxxxx | base64`
-    2. PHP：`<?=base64_encode('xxxxxxxx');`
+        # [account○]の数字は、複数のアカウントを追加する場合に連番となります
+        # passwd は、端末などで base64 エンコードする必要があります
+        #  ・端末：`echo xxxxxxxx | base64`
+        #  ・PHP：`<?=base64_encode('xxxxxxxx');`
 
 
 ---------------------------------------
@@ -52,7 +52,7 @@ PopTray Minus ユーザーは「[.poptrayrc がある場合](#poptrayrc-があ�
 
 ### 件名が異なる
 
-* 件名は本文をテキストで保存する際のファイル名として使用するため一部記号を変換した。
+* 件名は本文をテキストで保存する際のファイル名として使用するため一部記号を変換した
 
 ### 「読み込み中」の表示時間が長い
 
