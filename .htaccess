@@ -12,7 +12,7 @@ Header set X-Frame-Options SAMEORIGIN
 Header set X-Content-Type-Options "nosniff"
 Header set X-XSS-Protection "1; mode=block"
 <FilesMatch "\.(html|php)$">
-Header set X-Powered-By "AltTrayPlus/1.0"
+Header set X-Powered-By "AltTrayPlus/1.0.0.1"
 Header append Author "Gari-Hari LLC."
 </FilesMatch>
 <FilesMatch "\.(css|js|map|png|svg)$">
