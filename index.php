@@ -184,7 +184,7 @@ ob_implicit_flush( true );
                 if ( $delete )
                     exit( '<script>location.replace("./")</script><meta http-equiv=refresh content="0;URL=./?d">' );
                 ?>
-                <footer class=text-right><small class="badge badge-pill badge-primary"><a class=text-white href=./License.html>© <?=date( 'Y' )?> AltTray Plus</a></small></footer>
+                <footer class=text-right><small class="badge badge-pill badge-primary"><a class=text-white href=./LICENSE.html>© <?=date( 'Y' )?> AltTray Plus</a></small></footer>
             </div>
         </form><?=$total > 0 ? '
         <script>d.title="' . $total . '件受信 - AltTray Plus β";n.requestPermission(function(p){if(p==="granted"){' . $notify . '}})</script>' . $n : $n?>
