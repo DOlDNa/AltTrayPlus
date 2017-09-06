@@ -91,10 +91,10 @@ ob_implicit_flush( true );
                                     if ( isset( $headerinfo -> subject ) )
                                     {
                                         if ( stripos( $headerinfo -> subject, '=?' ) !== false )
-                                            $subject = mb_decode_mimeheader( trim( $headerinfo -> subject ) );
+                                            $subject = mb_decode_mimeheader( $headerinfo -> subject );
                                         else
-                                            $subject = trim( $headerinfo -> subject );
-                                        $subject = h( str_replace( array( '/', ':', '!', '?', '&' ), '-', $subject ) );
+                                            $subject = $headerinfo -> subject;
+                                        $subject = h( trim( str_replace( array( '/', ':', '!', '?', '&' ), '-', $subject ) ) );
                                         if ( isset( $headerinfo -> from[0] -> personal ) )
                                             $personal = stripos( $headerinfo -> from[0] -> personal, '=?' ) !== false ? h( mb_decode_mimeheader( $headerinfo -> from[0] -> personal ) ) : h( $headerinfo -> from[0] -> personal );
                                         else
