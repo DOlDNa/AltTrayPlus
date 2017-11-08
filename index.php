@@ -3,7 +3,7 @@ $reload = 1200;
 header('Refresh: '.$reload);
 header('Pragma: no-cache');
 date_default_timezone_set('Asia/Tokyo');
-#error_reporting(E_ERROR);
+error_reporting(E_ERROR);
 $n = PHP_EOL;
 $blk = $col = $total = $last_error = $body = $notify = null;
 $delete = filter_input(INPUT_POST, 'delete', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
@@ -22,12 +22,12 @@ function s($bytes)
 }
 function d($str, $num)
 {
-	switch ($num)
-	{
-		case 3: return imap_base64($str);
-		case 4: return imap_qprint($str);
-		default: return $str;
-	}
+	if ($num === 3)
+		return imap_base64($str);
+	elseif ($num === 4)
+		return imap_qprint($str);
+	else
+		return $str;
 }
 function l($str)
 {
