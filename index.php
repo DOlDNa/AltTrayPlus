@@ -169,7 +169,7 @@ ob_implicit_flush(true);
 														echo '<li><a onclick="$(this).attr(\'download\',\'',$attachname,'\').attr(\'href\',\'data:application/octet-stream;',$attach,'\')">',$attachname,'</a></li>';
 												}
 												elseif ($structure->parts[$h]->encoding === 0)
-													$body = str_replace("\r\n", '', strip_tags(mb_convert_encoding($attachment, 'UTF-8', $structure->parts[$h]->parameters[0]->value),'<a><br>'));
+													$body = str_replace("\r\n", '&#10;', trim(strip_tags(mb_convert_encoding($attachment, 'UTF-8', $structure->parts[$h]->parameters[0]->value),'<a><br>')));
 											}
 											echo '</ol>', $n;
 										}
