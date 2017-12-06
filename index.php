@@ -109,8 +109,8 @@ ob_implicit_flush(true);
 										$structure = imap_fetchstructure($imap, $k);
 										if (isset($structure->parts))
 										{
-											if (isset($structure->parts[0]->subtype) && strtoupper($structure->parts[0]->subtype) === 'ALTERNATIVE' || strtoupper($structure->parts[0]->subtype) === 'MIXED')
-												$encoding = $structure->parts[1]->encoding;
+											if (isset($structure->parts[0]->parts[0]->subtype))
+												$encoding = $structure->parts[0]->parts[0]->encoding;
 											else
 												$encoding = $structure->parts[0]->encoding;
 										}
@@ -121,6 +121,8 @@ ob_implicit_flush(true);
 											$charset = trim($structure->parameters[0]->value);
 										elseif ($structure->parts[0]->parameters[0]->attribute === 'CHARSET')
 											$charset = trim($structure->parts[0]->parameters[0]->value);
+										elseif ($structure->parts[0]->parts[0]->parameters[0]->attribute === 'CHARSET')
+											$charset = trim($structure->parts[0]->parts[0]->parameters[0]->value);
 										else
 											$charset = 'auto';
 										if (isset($encoding))
