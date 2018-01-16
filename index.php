@@ -31,7 +31,7 @@ function d($str, $num)
 }
 function l($str)
 {
-	return preg_replace_callback('/(https?:\/\/[^\s]*)/u', function($l){return '<a href="'.r($l[0]).'" target=_blank>'.$l[0].'</a>';}, $str);
+	return preg_replace_callback('/(https?:\/\/\S*)/u', function($l){return '<a href="'.$l[0].'" target=_blank rel="noopener noreferrer">'.$l[0].'</a>';}, $str);
 }
 function r($path)
 {
