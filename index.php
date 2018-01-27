@@ -31,11 +31,7 @@ function d($str, $num)
 }
 function l($str)
 {
-	return preg_replace_callback('/(https?:\/\/\S*)/u', function($l){return '<a href="'.$l[0].'" target=_blank rel="noopener noreferrer">'.$l[0].'</a>';}, $str);
-}
-function r($path)
-{
-	return str_replace(array('%3A', '%26', '%2F', '%5C'), array(':', '&amp;', DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), rawurlencode($path));
+	return preg_replace('/(https?:\/\/\S+?)(&quot;|&gt;| |　|\n)/u', '<a href="\1" target="_blank" rel="noopener noreferrer">\1</a>\2', $str);
 }
 ob_implicit_flush(true);
 ?>
