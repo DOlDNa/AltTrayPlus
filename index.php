@@ -94,6 +94,7 @@ ob_implicit_flush(true);
 											$subject = mb_decode_mimeheader($headerinfo->subject);
 										else
 											$subject = $headerinfo->subject;
+										$subject = str_replace(array("\r\n", "\n", '&#10;'), '', $subject);
 										$subject = h(trim(str_replace(array('/', ':', '!', '?', '&'), '-', $subject)));
 										if (isset($headerinfo->from[0]->personal))
 											$personal = stripos($headerinfo->from[0]->personal, '=?') !== false ? h(mb_decode_mimeheader($headerinfo->from[0]->personal)) : h($headerinfo->from[0]->personal);
