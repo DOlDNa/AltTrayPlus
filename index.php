@@ -125,7 +125,7 @@ ob_implicit_flush(true);
 										if (isset($encoding))
 											$body = d($fetchbody, $encoding);
 										else
-											$body = d($fetchbody, $structure->encoding);
+											$body = $structure->subtype === 'HTML' ? preg_replace("/(\n|\r|\r\n)+/us", "\n", d($fetchbody, $structure->encoding)) : d($fetchbody, $structure->encoding);
 										if (!$body)
 											$body = $fetchbody;
 										$body = isset($charset) && strtoupper($charset) !== 'UTF-8' ? mb_convert_encoding($body, 'UTF-8', $charset) : $body;
