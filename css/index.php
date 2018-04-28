@@ -29,7 +29,7 @@ a,#del{cursor:pointer}
 .attachment{margin-bottom:0;padding-left:2em;counter-reset:num}
 .attachment a{margin-left:.2em}
 .attachment li{margin:.3em 0;padding-right:1em}
-.attachment li:before{padding:0 .1em;border-radius:2px;content:"添付" counter(num);counter-increment:num}
+.attachment li:before{padding:0 .1em;border-radius:2px;content:"\006dfb\004ed8" counter(num);counter-increment:num}
 .view{display:none}
 small sup{padding:.1em .4em;border-radius:5em;display:inline-block;line-height:1;text-align:center}
 footer{text-align:right}
