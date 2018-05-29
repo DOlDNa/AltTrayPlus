@@ -1,9 +1,5 @@
 # <img src="./icon.png" alt=alt> AltTray Plus β
 
-ブラウザからチェック → ポップアップでお知らせ → 読んだメール＆いらないメールはまとめて削除
-
-「偽装メール」や「ウィルスメール」対策に最適な簡易プレビューと添付ファイルのダウンロード機能を実装
-
 ![ss-alttrayplus](https://user-images.githubusercontent.com/25574701/32033456-9ffe70c4-ba47-11e7-8ce9-43c2f51f8135.png)
 
 ---------------------------------------
