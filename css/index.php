@@ -25,7 +25,7 @@ a,#del{cursor:pointer}
 .header li,.footer a,.usage li{padding:.5em}
 .footer{text-align:center;padding-left:1.5em;padding-bottom:1em;clear:both}
 .footer a,small sup{white-space:nowrap}
-.detail p{margin:0;padding:2em;float:left;font-family:monospace;line-height:1.4;width:50%}
+.detail p{margin:0;padding:2em;float:left;font-family:monospace;line-height:1.6;width:50%}
 .attachment{margin-bottom:0;padding-left:2em;counter-reset:num}
 .attachment a{margin-left:.2em}
 .attachment li{margin:.3em 0;padding-right:1em}
