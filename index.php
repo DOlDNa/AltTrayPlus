@@ -128,7 +128,7 @@ ob_implicit_flush(true);
 											$body = $structure->subtype === 'HTML' ? preg_replace("/(\n|\r|\r\n)+/us", "\n", d($fetchbody, $structure->encoding)) : d($fetchbody, $structure->encoding);
 										if (!$body)
 											$body = $fetchbody;
-										$body = isset($charset) && strtoupper($charset) !== 'UTF-8' && strtoupper($charset) !== 'X-UNKNOWN' ? mb_convert_encoding($body, 'UTF-8', $charset) : $body;
+										$body = isset($charset) && strtoupper($charset) !== 'UTF-8' && strtoupper($charset) !== 'X-UNKNOWN' ? mb_convert_encoding($body, 'UTF-8', $charset) : mb_convert_encoding($body, 'UTF-8', 'auto');
 										$body = l(h($body));
 										$body = str_replace("\r\n", '&#10;', $body);
 
