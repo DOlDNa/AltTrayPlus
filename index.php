@@ -31,7 +31,7 @@ function d($str, $num)
 }
 function l($str)
 {
-	return preg_replace('/(https?:\/\/\S+?)(&quot;|&gt;|&lt;|&#10;|]| |　|\r\n)/u', '<a href="\1" target="_blank" rel="noopener noreferrer">\1</a>\2', $str);
+	return preg_replace('~(https?://[\w./]+[[:alnum:]]/?)~ui', '<a href="\1" target="_blank" rel="noopener noreferrer">\1</a>', $str);
 }
 ob_implicit_flush(true);
 ?>
@@ -150,22 +150,25 @@ ob_implicit_flush(true);
 											for ($h = 1, $atts = count($structure->parts)-1; $h <= $atts; ++$h)
 											{
 												$attachment = imap_fetchbody($imap, $k, $h + 1);
-												if (isset($structure->parts[$h]->parameters[0]->value) && strtoupper($structure->parts[$h]->subtype) !== 'HTML')
+												if (isset($structure->parts[$h]))
 												{
-													if ($structure->parts[$h]->encoding === 3)
+													if (strtoupper($structure->parts[$h]->subtype) !== 'HTML')
 													{
-														$attachname = stripos($structure->parts[$h]->parameters[0]->value, '=?') !== false ?
+														if ($structure->parts[$h]->encoding === 3)
+														{
+															$attachname = stripos($structure->parts[$h]->parameters[0]->value, '=?') !== false ?
 															mb_decode_mimeheader($structure->parts[$h]->parameters[0]->value):
 															$structure->parts[$h]->parameters[0]->value;
-														$attach = 'base64,'.str_replace("\r\n", '', $attachment);
+															$attach = 'base64,'.str_replace("\r\n", '', $attachment);
+														}
+														elseif ($structure->parts[$h]->encoding === 4)
+														{
+															$attachname = quoted_printable_decode($structure->parts[$h]->parameters[0]->value);
+															$attach = 'quoted-printable,'.str_replace("\r\n", '', $attachment);
+														}
+														if (isset($attach, $attachname))
+															echo '<li><a onclick="$(this).attr(\'download\',\'',$attachname,'\').attr(\'href\',\'data:application/octet-stream;',$attach,'\')">',$attachname,'</a></li>';
 													}
-													elseif ($structure->parts[$h]->encoding === 4)
-													{
-														$attachname = quoted_printable_decode($structure->parts[$h]->parameters[0]->value);
-														$attach = 'quoted-printable,'.str_replace("\r\n", '', $attachment);
-													}
-													if (isset($attach, $attachname))
-														echo '<li><a onclick="$(this).attr(\'download\',\'',$attachname,'\').attr(\'href\',\'data:application/octet-stream;',$attach,'\')">',$attachname,'</a></li>';
 												}
 												elseif ($structure->parts[$h]->encoding === 0)
 												{
