@@ -31,7 +31,7 @@ function d($str, $num)
 }
 function l($str)
 {
-	return preg_replace('~(https?://[\w./\?_\-=&%]+[[:alnum:]]/?)~ui', '<a href="\1" target="_blank" rel="noopener noreferrer">\1</a>', $str);
+	return preg_replace('~(https?://[\w./\?_\-=&%;]+[[:alnum:]]/?)~ui', '<a href="\1" target="_blank" rel="noopener noreferrer">\1</a>', $str);
 }
 ob_implicit_flush(true);
 ?>
