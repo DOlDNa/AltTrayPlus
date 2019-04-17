@@ -1,13 +1,11 @@
 # <img src="./icon.png" alt=alt> AltTray Plus β
 
-![ss-alttrayplus](https://user-images.githubusercontent.com/25574701/32033456-9ffe70c4-ba47-11e7-8ce9-43c2f51f8135.png)
-
 ---------------------------------------
 
 
 ## 動作および推奨環境
 
-* XAMPP for Linux 5.6.x、7.x
+* XAMPP for Linux 7.x
 * Web Notifications API 対応ブラウザ
 
 
