@@ -31,7 +31,12 @@ function d($str, $num)
 }
 function l($str)
 {
-	return preg_replace('~(https?://[\w./\?_\-=&%;]+[[:alnum:]]/?)~ui', '<a href="\1" target="_blank" rel="noopener noreferrer">\1</a>', $str);
+	return preg_replace_callback('~(https?://[\w./@\?_\-=&%;:]+[[:alnum:]]/?)~ui', 'm', $str);
+}
+function m($m)
+{
+	$m1 = trim($m[1], '&lt;&gt;');
+	return'<a href="'. $m1. '" target="_blank" rel="noopener noreferrer">'. $m1. '</a>';
 }
 ob_implicit_flush(true);
 ?>
@@ -43,7 +48,7 @@ ob_implicit_flush(true);
 		<title>AltTray Plus β</title>
 		<link href=css/ rel=stylesheet>
 		<meta name=description content="オルタナティブなメールチェッカー AltTray Plus">
-		<link href=icon.svg rel=icon type="image/svg+xml" sizes=any>
+		<link href=favicon.ico rel=icon>
 	</head>
 	<body>
 		<form method=post>
@@ -134,7 +139,7 @@ ob_implicit_flush(true);
 
 										echo
 										'					<ul id="t', $i, '-', $k, '" class=header>', $n,
-										'						<li class=delete><input type=checkbox id="c', $i, '-', $k, '" value="', $i, '+', $k, '" name=delete[] class=del></li>', $n,
+										'						<li class=delete><input type=checkbox id="c', $i, '-', $k, '" value="', $i, '+', $k, '" name=delete[] class=del><label for="c', $i, '-', $k, '">削除</label></li>', $n,
 										'						<li class=subject>', $subject, (isset($structure->parts) && count($structure->parts)-1 > 0 ? ' <small><sup>添付x'.(count($structure->parts)-1).'</sup></small>' : ''), '</li>', $n,
 										'						<li class=from>', $personal, ' &lt;', h($headerinfo->from[0]->mailbox), '@', h($headerinfo->from[0]->host), '&gt;</li>', $n,
 										'						<li class=date>', date('Y年n月j日 H時i分s秒', strtotime($headerinfo->Date)), '</li>', $n,
