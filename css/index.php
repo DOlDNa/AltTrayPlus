@@ -8,8 +8,8 @@ if ( filter_input( INPUT_SERVER, 'HTTP_IF_MODIFIED_SINCE' ) === $last_modified )
 #loading{color:#fff;display:block;height:200px;left:50%;margin-left:-100px;margin-top:-100px;position:fixed;text-align:center;top:50%;width:200px;z-index:2}
 #loading i{animation:i 1s infinite;display:inline-block}@keyframes i{0%,100%{transform:translate(0)}50%{transform:translateY(-1em)}}#loading i:nth-child(2){animation-delay:.1s}
 #loading i:nth-child(3){animation-delay:.2s}#loading i:nth-child(4){animation-delay:.3s}#loading i:nth-child(5){animation-delay:.4s}
-*{box-sizing:border-box}
-body{color:dimgrey;font-family:Roboto,"Droid Sans","Yu Gothic",YuGothic,"Hiragino Sans",sans-serif;font-kerning:auto}
+*{box-sizing:border-box;font-family:sans-serif}
+body{color:#BEBEBE;background-color:#323234}
 h1,h2,section{margin-bottom:1em}h1 img{vertical-align:bottom}
 a{color:dodgerblue;text-decoration:none}
 a:hover{opacity:.5}
@@ -20,6 +20,9 @@ a,#del{cursor:pointer}
 .header{padding-left:0}
 .header li,.attachment li{display:inline-block}
 .header li+li,.footer a+a{border-left:1px solid dimgrey}
+.delete input{display:none}
+.delete input+label{cursor:pointer;padding:5px 7px;border-radius:4px;box-shadow:0px 2px 2px rgba(0,0,0,.3)}
+.delete input:checked+label{box-shadow:inset 0px 2px 2px rgba(0,0,0,.3)}
 .subject{width:30%}
 .subject,.from,.date,.detail p,.attachment li{word-wrap:break-word;white-space:pre-wrap}
 .header li,.footer a,.usage li{padding:.5em}
