@@ -111,7 +111,7 @@ ob_implicit_flush(true);
 											$subject = mb_decode_mimeheader($headerinfo->subject);
 										else
 											$subject = $headerinfo->subject;
-										$subject = str_replace(["\r\n", PHP_EOL, '&#10;'], '', $subject);
+										$subject = str_replace(["\r\n", $n, '&#10;'], '', $subject);
 										$subject = h(trim(str_replace(['/', ':', '!', '?', '&'], '-', $subject)));
 										if (isset($headerinfo->from[0]->personal))
 											$personal = stripos($headerinfo->from[0]->personal, '=?') !== false ? h(mb_decode_mimeheader($headerinfo->from[0]->personal)) : h($headerinfo->from[0]->personal);
@@ -142,7 +142,7 @@ ob_implicit_flush(true);
 										if (isset($encoding))
 											$body = d($fetchbody, $encoding);
 										else
-											$body = $structure->subtype === 'HTML' ? preg_replace("/(\n|\r|\r\n)+/us", PHP_EOL, d($fetchbody, $structure->encoding)) : d($fetchbody, $structure->encoding);
+											$body = $structure->subtype === 'HTML' ? preg_replace("/(\n|\r|\r\n)+/us", $n, d($fetchbody, $structure->encoding)) : d($fetchbody, $structure->encoding);
 										if (!$body)
 											$body = $fetchbody;
 										$body = isset($charset) && strtoupper($charset) !== 'UTF-8' && strtoupper($charset) !== 'X-UNKNOWN' ? mb_convert_encoding($body, 'UTF-8', $charset) : mb_convert_encoding($body, 'UTF-8', 'auto');
