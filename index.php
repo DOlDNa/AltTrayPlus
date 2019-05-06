@@ -38,6 +38,18 @@ function m($m)
 	$m1 = trim($m[1], '&lt;&gt;');
 	return'<a href="'. $m1. '" target="_blank" rel="noopener noreferrer">'. $m1. '</a>';
 }
+function p($str)
+{
+	$str = trim($str);
+	if (stripos($str, '<script') !== false) $str = preg_replace('/(<script[^>]*>.*?<\/script>)/is', '', $str);
+	if (stripos($str, '<style') !== false) $str = preg_replace('/(<style[^>]*>.*?<\/style>)/is', '', $str);
+	if (stripos($str, '<a ') !== false) $str = preg_replace('/<a.*?href="(.*?)"[^>]*>(.*?)<\/a>/i', "$2\n$1", $str);
+	if (stripos($str, '<img ') !== false) $str = preg_replace_callback('/<img.*?src="(.*?)"[^>]*>/i',
+		function($m){if (stripos($m[1], 'spacer') === false && stripos($m[1], 'blank') === false && stripos($m[1], 'beacon') === false) return $m[1];}, $str);
+	$str = strip_tags($str);
+	$str = preg_replace("/(\n|\r|\r\n)+/us", PHP_EOL, $str);
+	return l($str);
+}
 ob_implicit_flush(true);
 ?>
 <!doctype html>
@@ -48,7 +60,7 @@ ob_implicit_flush(true);
 		<title>AltTray Plus β</title>
 		<link href=css/ rel=stylesheet>
 		<meta name=description content="オルタナティブなメールチェッカー AltTray Plus">
-		<link href=favicon.ico rel=icon>
+		<link href=favicon.ico rel="shortcut icon">
 	</head>
 	<body>
 		<form method=post>
@@ -99,8 +111,8 @@ ob_implicit_flush(true);
 											$subject = mb_decode_mimeheader($headerinfo->subject);
 										else
 											$subject = $headerinfo->subject;
-										$subject = str_replace(array("\r\n", "\n", '&#10;'), '', $subject);
-										$subject = h(trim(str_replace(array('/', ':', '!', '?', '&'), '-', $subject)));
+										$subject = str_replace(["\r\n", PHP_EOL, '&#10;'], '', $subject);
+										$subject = h(trim(str_replace(['/', ':', '!', '?', '&'], '-', $subject)));
 										if (isset($headerinfo->from[0]->personal))
 											$personal = stripos($headerinfo->from[0]->personal, '=?') !== false ? h(mb_decode_mimeheader($headerinfo->from[0]->personal)) : h($headerinfo->from[0]->personal);
 										else
@@ -130,11 +142,11 @@ ob_implicit_flush(true);
 										if (isset($encoding))
 											$body = d($fetchbody, $encoding);
 										else
-											$body = $structure->subtype === 'HTML' ? preg_replace("/(\n|\r|\r\n)+/us", "\n", d($fetchbody, $structure->encoding)) : d($fetchbody, $structure->encoding);
+											$body = $structure->subtype === 'HTML' ? preg_replace("/(\n|\r|\r\n)+/us", PHP_EOL, d($fetchbody, $structure->encoding)) : d($fetchbody, $structure->encoding);
 										if (!$body)
 											$body = $fetchbody;
 										$body = isset($charset) && strtoupper($charset) !== 'UTF-8' && strtoupper($charset) !== 'X-UNKNOWN' ? mb_convert_encoding($body, 'UTF-8', $charset) : mb_convert_encoding($body, 'UTF-8', 'auto');
-										$body = l(h($body));
+										$body = stripos($body, '<body') !== false ? p($body) : l($body);
 										$body = str_replace("\r\n", '&#10;', $body);
 
 										echo
