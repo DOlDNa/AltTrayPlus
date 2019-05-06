@@ -18,7 +18,7 @@ a,#del{cursor:pointer}
 #del:hover{background-image:linear-gradient(to bottom right,deepskyblue,dodgerblue)}
 #del,.attachment li:before,small sup{background-color:dodgerblue;color:white}
 .header{padding-left:0}
-.header li,.attachment li{display:inline-block}
+.header li,.attachment li{display:inline-block;vertical-align:middle}
 .header li+li,.footer a+a{border-left:1px solid dimgrey}
 .delete input{display:none}
 .delete input+label{cursor:pointer;padding:5px 7px;border-radius:4px;box-shadow:0px 2px 2px rgba(0,0,0,.3)}
@@ -28,7 +28,7 @@ a,#del{cursor:pointer}
 .header li,.footer a,.usage li{padding:.5em}
 .footer{text-align:center;padding-left:1.5em;padding-bottom:1em;clear:both}
 .footer a,small sup{white-space:nowrap}
-.detail p{margin:0;padding:2em;float:left;font-family:monospace;line-height:1.6;width:50%}
+.detail p{margin:0;padding:2em;float:left;font-family:monospace;line-height:1.8;width:50%}
 .attachment{margin-bottom:0;padding-left:2em;counter-reset:num}
 .attachment a{margin-left:.2em}
 .attachment li{margin:.3em 0;padding-right:1em}
