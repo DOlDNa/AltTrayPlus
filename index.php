@@ -35,7 +35,7 @@ function l($str)
 }
 function m($m)
 {
-	$m1 = trim($m[1], '&lt;&gt;');
+	$m1 = str_replace('&lt;&gt;', '', $m[1]);
 	return'<a href="'. $m1. '" target="_blank" rel="noopener noreferrer">'. $m1. '</a>';
 }
 function p($str)
