@@ -1,6 +1,6 @@
 <?php
 $reload = 1200;
-header('Refresh: '.$reload);
+header('Refresh: '. $reload);
 header('Pragma: no-cache');
 date_default_timezone_set('Asia/Tokyo');
 error_reporting(E_ERROR);
@@ -14,11 +14,11 @@ function h($str)
 function s($bytes)
 {
 	if ($bytes >= 1048576)
-		return ceil($bytes / 1048576).'MB';
+		return ceil($bytes / 1048576). 'MB';
 	elseif ($bytes >= 1024)
-		return ceil($bytes / 1024).'KB';
+		return ceil($bytes / 1024). 'KB';
 	else
-		return $bytes.'B';
+		return $bytes. 'B';
 }
 function d($str, $num)
 {
@@ -36,7 +36,7 @@ function l($str)
 function m($m)
 {
 	$m1 = str_replace('&lt;&gt;', '', $m[1]);
-	return'<a href="'. $m1. '" target="_blank" rel="noopener noreferrer">'. $m1. '</a>';
+	return '<a href="'. $m1. '" target="_blank" rel="noopener noreferrer">'. $m1. '</a>';
 }
 function p($str)
 {
@@ -44,8 +44,8 @@ function p($str)
 	if (stripos($str, '<script') !== false) $str = preg_replace('/(<script[^>]*>.*?<\/script>)/is', '', $str);
 	if (stripos($str, '<style') !== false) $str = preg_replace('/(<style[^>]*>.*?<\/style>)/is', '', $str);
 	if (stripos($str, '<a ') !== false) $str = preg_replace('/<a.*?href="(.*?)"[^>]*>(.*?)<\/a>/i', "$2\n$1", $str);
-	if (stripos($str, '<img ') !== false) $str = preg_replace_callback('/<img.*?src="(.*?)"[^>]*>/i',
-		function($m){if (stripos($m[1], 'spacer') === false && stripos($m[1], 'blank') === false && stripos($m[1], 'beacon') === false) return $m[1];}, $str);
+	if (stripos($str, '<img ') !== false)
+		$str = preg_replace_callback('/<img.*?src="(.*?)"[^>]*>/i', function($m){if (stripos($m[1], 'spacer') === false && stripos($m[1], 'blank') === false && stripos($m[1], 'beacon') === false) return $m[1];}, $str);
 	$str = strip_tags($str);
 	$str = preg_replace("/(\n|\r|\r\n)+/us", PHP_EOL, $str);
 	return l($str);
@@ -64,10 +64,11 @@ ob_implicit_flush(true);
 	</head>
 	<body>
 		<form method=post>
-			<script>var d=document,div=d.createElement("div"),f=d.getElementsByTagName("form")[0],n=Notification;f.style.display="none";div.setAttribute("id","loading-bg");d.body.appendChild(div);div.innerHTML="<d"+"iv id=loading><i>読<\/i><i>み<\/i><i>込<\/i><i>み<\/i><i>中<\/i><\/d"+"iv>";setTimeout(function(){div.innerHTML="<d"+"iv id=loading><i>タイムアウトしました<\/i><i>リロードして下さい<\/i><\/d"+"iv>"},60000)</script><?php ob_flush();echo $n?>
+			<script>var d=document,div=d.createElement("div"),f=d.getElementsByTagName("form")[0],n=Notification;f.style.display="none";div.setAttribute("id","loading-bg");d.body.appendChild(div);div.innerHTML="<d"+"iv id=loading><i>読<\/i><i>み<\/i><i>込<\/i><i>み<\/i><i>中<\/i><\/d"+"iv>";setTimeout(function(){div.innerHTML="<d"+"iv id=loading><i>タイムアウトしました<\/i><i>リロードして下さい<\/i><\/d"+"iv>"},60000)</script>
+			<?php ob_flush()?>
 			<nav>
-				<h1><img src=icon.svg alt=alt width=32 height=32> AltTray Plus <small><sup>β</sup></small></h1><?=file_exists($rc = '.poptrayrc') && is_file($rc) && is_readable($rc) ? '
-				<button accesskey=d tabindex=1 type=submit id=del>選択したメールを削除する</button>'.$n : $n?>
+				<h1><img src=icon.svg alt=alt width=32 height=32> AltTray Plus <small><sup>β</sup></small></h1>
+				<?=is_file($rc = '.poptrayrc') && is_readable($rc) ? '<button accesskey=d tabindex=1 type=submit id=del>選択したメールを削除する</button>'. $n : $n?>
 			</nav>
 			<div><?=$n;
 				if (is_readable($rc))
@@ -81,17 +82,17 @@ ob_implicit_flush(true);
 							case 'IMAP': $protocol = 'imap/ssl'; break;
 							default: $protocol = 'pop3'; break;
 						}
-						$imap = imap_open('{'.$ini['account'.$i]['host'].':'.$ini['account'.$i]['port'].'/'.$protocol.'/novalidate-cert}INBOX', $ini['account'.$i]['user'], base64_decode($ini['account'.$i]['passwd']), OP_SILENT);
+						$imap = imap_open('{'. $ini['account'. $i]['host']. ':'. $ini['account'. $i]['port']. '/'. $protocol. '/novalidate-cert}INBOX', $ini['account'. $i]['user'], base64_decode($ini['account'. $i]['passwd']), OP_SILENT);
 						if ($imap or $last_error = imap_last_error())
 						{
 							$d = imap_num_msg($imap);
 							if ($d > 0)
 							{
 								$sort = imap_sort($imap, SORTDATE, 1, SE_UID);
-								$notify .= 'new n("'.h($ini['account'.$i]['name']).'",{icon:"./icon.png",body:"新着メールが'.$d.'件あります。"});';
+								$notify .= 'new n("'. h($ini['account'. $i]['name']). '",{icon:"./icon.png",body:"新着メールが'. $d. '件あります。"});';
 								echo
 								'				<section>', $n,
-								'					<h2>', h($ini['account'.$i]['name']), ' <small><sup>', $d, '</sup></small></h2>', $n;
+								'					<h2>', h($ini['account'. $i]['name']), ' <small><sup>', $d, '</sup></small></h2>', $n;
 								for ($j = 0; $j < $d; ++$j)
 								{
 									$k = imap_msgno($imap, $sort[$j]);
@@ -152,7 +153,7 @@ ob_implicit_flush(true);
 										echo
 										'					<ul id="t', $i, '-', $k, '" class=header>', $n,
 										'						<li class=delete><input type=checkbox id="c', $i, '-', $k, '" value="', $i, '+', $k, '" name=delete[] class=del><label for="c', $i, '-', $k, '">削除</label></li>', $n,
-										'						<li class=subject>', $subject, (isset($structure->parts) && count($structure->parts)-1 > 0 ? ' <small><sup>添付x'.(count($structure->parts)-1).'</sup></small>' : ''), '</li>', $n,
+										'						<li class=subject>', $subject, (isset($structure->parts) && count($structure->parts)-1 > 0 ? ' <small><sup>添付x'. (count($structure->parts)-1). '</sup></small>' : ''), '</li>', $n,
 										'						<li class=from>', $personal, ' &lt;', h($headerinfo->from[0]->mailbox), '@', h($headerinfo->from[0]->host), '&gt;</li>', $n,
 										'						<li class=date>', date('Y年n月j日 H時i分s秒', strtotime($headerinfo->Date)), '</li>', $n,
 										'						<li class=size>', s($headerinfo->Size), '</li>', $n,
@@ -163,7 +164,8 @@ ob_implicit_flush(true);
 										'						<div class=detail>', $n;
 										if (isset($structure->parts) && count($structure->parts)-1 > 0)
 										{
-											echo '							<ol class=attachment>';
+											echo
+											'							<ol class=attachment>';
 											for ($h = 1, $atts = count($structure->parts)-1; $h <= $atts; ++$h)
 											{
 												$attachment = imap_fetchbody($imap, $k, $h + 1);
@@ -176,12 +178,17 @@ ob_implicit_flush(true);
 															$attachname = stripos($structure->parts[$h]->parameters[0]->value, '=?') !== false ?
 															mb_decode_mimeheader($structure->parts[$h]->parameters[0]->value):
 															$structure->parts[$h]->parameters[0]->value;
-															$attach = 'base64,'.str_replace("\r\n", '', $attachment);
+															$attach = 'base64,'. str_replace("\r\n", '', $attachment);
 														}
 														elseif ($structure->parts[$h]->encoding === 4)
 														{
 															$attachname = quoted_printable_decode($structure->parts[$h]->parameters[0]->value);
-															$attach = 'quoted-printable,'.str_replace("\r\n", '', $attachment);
+															$attach = 'quoted-printable,'. str_replace("\r\n", '', $attachment);
+														}
+														else
+														{
+															$attachname = $structure->parts[$h]->parameters[0]->value;
+															$attach = 'charset=UTF-8,'. rawurlencode($attachment);
 														}
 														if (isset($attach, $attachname))
 															echo '<li><a onclick="$(this).attr(\'download\',\'',$attachname,'\').attr(\'href\',\'data:application/octet-stream;',$attach,'\')">',$attachname,'</a></li>';
@@ -218,6 +225,7 @@ ob_implicit_flush(true);
 								'					<div>', $last_error, '</div>', $n,
 								'				</section>', $n;
 						}
+						ob_flush();
 						if ($delete)
 							imap_close($imap, CL_EXPUNGE);
 						else
@@ -242,7 +250,7 @@ ob_implicit_flush(true);
 				<footer><small>&copy; <?=date('Y')?> AltTray Plus</small></footer>
 			</div>
 		</form><?=$total > 0 ? '
-		<script>d.title="'.$total.'件受信 - AltTray Plus β";n.requestPermission(function(p){if(p==="granted"){'.$notify.'}})</script>'.$n : $n?>
+		<script>d.title="'. $total. '件受信 - AltTray Plus β";n.requestPermission(function(p){if(p==="granted"){'. $notify. '}})</script>'. $n : $n?>
 		<script src=js/></script>
 	</body>
 </html>
