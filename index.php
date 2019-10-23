@@ -187,7 +187,7 @@ ob_implicit_flush(true);
 														}
 														else
 														{
-															$attachname = $structure->parts[$h]->parameters[0]->value;
+															$attachname = htmlentities($structure->parts[$h]->parameters[0]->value, ENT_QUOTES);
 															$attach = 'charset=UTF-8,'. rawurlencode($attachment);
 														}
 														if (isset($attach, $attachname))
