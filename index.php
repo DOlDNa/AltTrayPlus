@@ -50,7 +50,7 @@ function p($str)
 	$str = preg_replace("/(\n|\r|\r\n)+/us", PHP_EOL, $str);
 	return l($str);
 }
-ob_implicit_flush(true);
+ob_implicit_flush(1);
 ?>
 <!doctype html>
 <html lang=ja>
