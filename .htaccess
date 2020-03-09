@@ -1,23 +1,29 @@
 <Files .poptrayrc>
-Deny from all
+Require all denied
 </Files>
+
 EnableMMAP Off
 FileETag None
+
 <ifModule mod_deflate.c>
 AddOutputFilterByType DEFLATE text/html text/css text/javascript application/x-javascript application/x-httpd-php
 </ifModule>
+
 <IfModule mod_headers.c>
 Header unset ETag
 Header set X-Frame-Options SAMEORIGIN
 Header set X-Content-Type-Options "nosniff"
 Header set X-XSS-Protection "1; mode=block"
-<FilesMatch "\.(html|php)$">
-Header set X-Powered-By "AltTrayPlus/1.2.9"
-Header append Author "Gari-Hari LLC."
-</FilesMatch>
-<FilesMatch "\.(css|js|map|png|svg)$">
+Header set X-Powered-By "AltTrayPlus/2"
+
+<FilesMatch "\.(css|js|png|svg)$">
+
+<IfModule mod_expires.c>
 ExpiresActive On
 ExpiresDefault "access plus 1 weeks"
+</IfModule>
+Header unset ETag
 Header append Vary: Accept-Encoding
 </FilesMatch>
+
 </IfModule>
