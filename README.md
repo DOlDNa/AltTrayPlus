@@ -1,4 +1,4 @@
-# <img src="./icon.svg" alt=alt> AltTray Plus 2
+# <img src="./icon.svg" alt=alt width=64 height=50> AltTray Plus 2
 ローカルホストで使用するメールチェッカー
 ---------------------------------------
 
