@@ -111,6 +111,7 @@ function m($m)
 		<title>AltTray Plus 2</title>
 		<link href=alt.css rel=stylesheet>
 		<link href=icon.svg rel=icon sizes=any type="image/svg+xml">
+		<script src=js/></script>
 	</head>
 	<body>
 		<header>
@@ -346,7 +347,6 @@ function m($m)
 			</form>
 		</main><?=$total > 0 ? '
 		<script>document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(function(p){if(p==="granted"){'. $notify. '}})</script>' : '', $n?>
-		<script src=js/></script>
 		<footer>&copy; <?=date('Y')?> AltTray Plus 2, <?=round(microtime(true) - $time_start, 4), '秒, ', s(memory_get_usage() - $base_mem)?>.</footer>
 	</body>
 </html>
