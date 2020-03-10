@@ -29,11 +29,11 @@ PopTray Minus ユーザーは「[.poptrayrc がある場合](#poptrayrc-があ�
 
 ### .poptrayrc がある場合
 
-1. AltTrayPlus フォルダ内に .poptrayrc を配置
+* AltTrayPlus フォルダ内に .poptrayrc を配置
 
 ### .poptrayrc がない場合
 
-1. http://localhost/AltTrayPlus/?config にアクセスし、フォームにアカウントを入力
+* http://localhost/AltTrayPlus/?config にアクセスし、フォームにアカウントを入力
 
 ---------------------------------------
 
