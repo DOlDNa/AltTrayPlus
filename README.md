@@ -14,7 +14,7 @@
 
 ## 動作および推奨環境
 
-* XAMPP for Linux 7.x / Docker
+* XAMPP for Linux / Docker ([lapi](https://github.com/DOlDNa/lapi)) 
 * Web Notifications API 対応ブラウザ
 
 
