@@ -1,12 +1,12 @@
 <?php
+$time_start = hrtime(true);
+$base_mem = memory_get_usage();
 header('Refresh: 1200');
 header('Pragma: no-cache');
 date_default_timezone_set('Asia/Tokyo');
 error_reporting(0);
 ob_implicit_flush(1);
 imap_timeout(IMAP_READTIMEOUT, 3);
-$time_start = microtime(true);
-$base_mem = memory_get_usage();
 $n = PHP_EOL;
 $blk = $col = $total = 0;
 $body = $notify = '';
@@ -85,15 +85,16 @@ function l($str)
 	if (stripos($str, '<script') !== false) $str = preg_replace('/(<script[^>]*>.*?<\/script>)/is', '', $str);
 	if (stripos($str, '<style') !== false) $str = preg_replace('/(<style[^>]*>.*?<\/style>)/is', '', $str);
 	if (stripos($str, '</tr>') !== false || stripos($str, '</p>') !== false || stripos($str, '<br>') !== false) $str = str_replace(['</tr>', '</p>', '<br>'], '&#10;', $str);
-	$str = strip_tags($str, '<a>');
 	if (stripos($str, '<a') !== false)
 	{
+		$str = h(strip_tags($str, '<a>'));
 		$str = preg_replace('/(&nbsp;|&zwnj;|\s)+/', '', $str);
 		$str = preg_replace('/<a.*?href="(.*?)"[^>]*>(.*?)<\/a>/iu', '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>&#10;', $str);
 	}
 	else
 	{
-		$str = preg_replace_callback('|(https?://[ \w#$%&()+-./:;=?~@]+[[:alnum:]]/?)|iu', 'm', $str);
+		$str = h($str);
+		$str = preg_replace_callback('|(https?://[ \w#$%&()+-./:;=?~@\]\[]+[[:alnum:]]/?)|iu', 'm', $str);
 		$str = str_replace(["\r\n", "\r", "\n",], '&#10;', $str);
 	}
 	return $str;
@@ -111,12 +112,12 @@ function m($m)
 		<title>AltTray Plus 2</title>
 		<link href=alt.css rel=stylesheet>
 		<link href=icon.svg rel=icon sizes=any type="image/svg+xml">
-		<script src=js/></script>
 	</head>
 	<body>
 		<header>
 			<h1><a href="./"><img src=icon.svg alt=alt width=64 height=50> AltTray Plus 2 <sup>β</sup></a></h1>
 			<?=filter_has_var(INPUT_GET, 'config') ? '' : '<a href="./?config"><img src="Cog_font_awesome.svg" alt=conf data-license="Dave Gandy CC BY-SA 3.0" width=32 height=32></a>', $n?>
+			<script src=js/ async></script>
 		</header>
 		<main>
 			<form method=post><?php ob_flush();
@@ -347,6 +348,6 @@ function m($m)
 			</form>
 		</main><?=$total > 0 ? '
 		<script>document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(function(p){if(p==="granted"){'. $notify. '}})</script>' : '', $n?>
-		<footer>&copy; <?=date('Y')?> AltTray Plus 2, <?=round(microtime(true) - $time_start, 4), '秒, ', s(memory_get_usage() - $base_mem)?>.</footer>
+		<footer>&copy; <?=date('Y')?> AltTray Plus, <?=round((hrtime(true) - $time_start)/1e+9, 4), '秒, ', s(memory_get_usage() - $base_mem)?>.</footer>
 	</body>
 </html>
