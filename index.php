@@ -69,7 +69,7 @@ function b($email)
 }
 function h($str)
 {
-	return htmlspecialchars($str, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	return htmlspecialchars($str, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
 }
 function s(int $bytes)
 {
@@ -88,7 +88,8 @@ function l($str)
 	if (stripos($str, '<a') !== false)
 	{
 		$str = h(strip_tags($str, '<a>'));
-		$str = preg_replace('/(&nbsp;|&zwnj;|\s)+/', '', $str);
+		$str = preg_replace_callback('/(&lt;a.*?&lt;\/a&gt;)/', function ($m) {return htmlspecialchars_decode($m[0]);}, $str);
+		$str = preg_replace('/(&nbsp;|&zwnj;|\s\s)+/', '', $str);
 		$str = preg_replace('/<a.*?href="(.*?)"[^>]*>(.*?)<\/a>/iu', '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>&#10;', $str);
 	}
 	else
