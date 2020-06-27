@@ -1,7 +1,7 @@
 <?php
 $time_start = hrtime(true);
 $base_mem = memory_get_usage();
-header('Refresh: 1200');
+$refresh = 9e5; # 9×10^5 = 15分
 header('Pragma: no-cache');
 date_default_timezone_set('Asia/Tokyo');
 error_reporting(0);
@@ -88,7 +88,7 @@ function l($str)
 	if (stripos($str, '<a') !== false)
 	{
 		$str = h(strip_tags($str, '<a>'));
-		$str = preg_replace_callback('/(&lt;a.*?&lt;\/a&gt;)/', function ($m) {return htmlspecialchars_decode($m[0]);}, $str);
+		$str = preg_replace_callback('/(&lt;a.*?\/a&gt;)/is', function ($m) {return htmlspecialchars_decode($m[0]);}, $str);
 		$str = preg_replace('/(&nbsp;|&zwnj;|\s\s)+/', '', $str);
 		$str = preg_replace('/<a.*?href="(.*?)"[^>]*>(.*?)<\/a>/iu', '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>&#10;', $str);
 	}
@@ -140,7 +140,7 @@ function m($m)
 					(
 					'			</form>'. $n.
 					'		</main>'. $n.
-					'		<footer>&copy; '. date('Y'). ' AltTray Plus 2, '. round(microtime(true) - $time_start, 4). '秒, '. s(memory_get_usage() - $base_mem). '.</footer>'. $n.
+					'		<footer>&copy; '. date('Y'). ' AltTray Plus 2, '. round((hrtime(true) - $time_start)/1e9, 4). '秒, '. s(memory_get_usage() - $base_mem). '.</footer>'. $n.
 					'	</body>'. $n.
 					'</html>'
 					);
@@ -337,7 +337,7 @@ function m($m)
 				'						<li><strong>.poptrayrc</strong> を <strong>AltTrayPlus/</strong> にコピーするか、下のフォームから作成します。</li>', $n,
 				'						<li>歯車アイコンをクリックするとアカウントの編集と追加を行えます。</li>', $n,
 				'						<li>メール削除は、各メールの「削除」ボタンをクリックしてから、「選択したメールを削除する」ボタンを押します。</li>', $n,
-				'						<li>自動チェックの間隔を変更する場合は、<strong>AltTrayPlus/index.php</strong> をテキストエディタで開き、『Refresh:』の数値を変えます。</li>', $n,
+				'						<li>オンライン時のみ自動でメールチェックを行います。当該間隔は、<strong>AltTrayPlus/index.php</strong> をテキストエディタで開き、『<code>$refresh</code>』の値を変更して下さい。</li>', $n,
 				'						<li>スパムメールを自動削除する場合は、<strong>AltTrayPlus/blacklist.txt</strong> にメールアドレスを一行づつ入力します。</li>', $n,
 				'					</ol>', $n,
 				'				</section>', $n,
@@ -347,8 +347,8 @@ function m($m)
 				'				</section>', $n;
 			}?>
 			</form>
-		</main><?=$total > 0 ? '
-		<script>document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(function(p){if(p==="granted"){'. $notify. '}})</script>' : '', $n?>
-		<footer>&copy; <?=date('Y')?> AltTray Plus, <?=round((hrtime(true) - $time_start)/1e+9, 4), '秒, ', s(memory_get_usage() - $base_mem)?>.</footer>
+		</main>
+		<script>(function l(){setTimeout(function(){if(navigator.onLine){location.reload()}l()},<?=$refresh?>)})();<?=$total > 0 ? 'document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(function(p){if(p==="granted"){'. $notify. '}})' : ''?></script>
+		<footer>&copy; <?=date('Y')?> AltTray Plus, <?=round((hrtime(true) - $time_start)/1e9, 4), '秒, ', s(memory_get_usage() - $base_mem)?>.</footer>
 	</body>
 </html>
