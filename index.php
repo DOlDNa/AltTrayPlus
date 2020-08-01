@@ -95,7 +95,7 @@ function l($str)
 	else
 	{
 		$str = h($str);
-		$str = preg_replace_callback('|(https?://[ \w#$%&()+-./:;=?~@\]\[]+[[:alnum:]]/?)|iu', 'm', $str);
+		$str = preg_replace_callback('|(https?://[ \w#$%&()+-./:;’=?~@\]\[]+[[:alnum:]]/?)|iu', 'm', $str);
 		$str = str_replace(["\r\n", "\r", "\n",], '&#10;', $str);
 	}
 	return $str;
