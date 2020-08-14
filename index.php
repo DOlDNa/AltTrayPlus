@@ -88,14 +88,15 @@ function l($str)
 	if (stripos($str, '<a') !== false)
 	{
 		$str = h(strip_tags($str, '<a>'));
-		$str = preg_replace_callback('/(&lt;a.*?\/a&gt;)/is', function ($m) {return htmlspecialchars_decode($m[0]);}, $str);
+		$str = preg_replace_callback('|(&lt;a.*?/a&gt;)|isu', function ($m) {return htmlspecialchars_decode($m[1]);}, $str);
 		$str = preg_replace('/(&nbsp;|&zwnj;|\s\s)+/', '', $str);
 		$str = preg_replace('/<a.*?href="(.*?)"[^>]*>(.*?)<\/a>/iu', '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>&#10;', $str);
 	}
 	else
 	{
-		$str = h($str);
 		$str = preg_replace_callback('|(https?://[ \w#$%&()+-./:;’=?~@\]\[]+[[:alnum:]]/?)|iu', 'm', $str);
+		$str = h($str);
+		$str = preg_replace_callback('|(&lt;a.*?/a&gt;)|isu', function ($m) {return htmlspecialchars_decode($m[1]);}, $str);
 		$str = str_replace(["\r\n", "\r", "\n",], '&#10;', $str);
 	}
 	return $str;
