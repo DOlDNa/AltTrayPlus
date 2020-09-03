@@ -2,6 +2,7 @@
 $time_start = hrtime(true);
 $base_mem = memory_get_usage();
 $refresh = 9e5; # 9×10^5 = 15分
+$save_header = false;
 header('Pragma: no-cache');
 date_default_timezone_set('Asia/Tokyo');
 error_reporting(0);
@@ -36,9 +37,8 @@ if (!$delete && $a = filter_input_array(INPUT_POST, [
 			'protocol='. trim($a['protocol'][$l]). $n. $n;
 	}
 	if (isset($accounts)) file_put_contents('.poptrayrc', implode($accounts), LOCK_EX);
-	exit(header('Location: ./'));
+	exit (header('Location: ./'));
 }
-
 function f(int $i)
 {
 	global $ini;
@@ -51,20 +51,21 @@ function f(int $i)
 						<input name=port[] type=text placeholder="ポート: 995" value="'. ($ini['account'. $i]['port'] ?? ''). '">
 						<input name=password[] type=text placeholder="パスワード: '. (isset($ini['account'. $i]['passwd']) ? '変更時のみ入力' : 'xxxxxxxx'). '">
 						<select name=protocol[] tabindex=-1>'. (isset($ini['account'. $i]['protocol']) ? '' : '<option selected disabled>プロトコル: 選択して下さい</option>'). '
-							<option value="POP3 SSL"'. (isset($ini['account'. $i]['protocol']) && $ini['account'. $i]['protocol'] === 'POP3 SSL' ? ' selected' : ''). '>POP3 SSL</option>
-							<option value="POP3"'. (isset($ini['account'. $i]['protocol']) && $ini['account'. $i]['protocol'] === 'POP3' ? ' selected' : ''). '>POP3</option>
-							<option value="IMAP"'. (isset($ini['account'. $i]['protocol']) && $ini['account'. $i]['protocol'] === 'IMAP' ? ' selected' : ''). '>IMAP</option>
+							<option value="POP3 SSL"'. (isset($ini['account'. $i]['protocol']) && 'POP3 SSL' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>POP3 SSL</option>
+							<option value="POP3"'. (isset($ini['account'. $i]['protocol']) && 'POP3' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>POP3</option>
+							<option value="IMAP"'. (isset($ini['account'. $i]['protocol']) && 'IMAP' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>IMAP</option>
 						</select>
 					</fieldset>';
 }
-
 function b($email)
 {
 	global $blacklist;
 	if (filter_var($email, FILTER_VALIDATE_EMAIL))
 	{
+		$e = [];
 		$list = file($blacklist, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-		if (!in_array($email, $list, true)) return $email;
+		foreach ($list as $l) if (false !== stripos($email, $l)) $e[] = $l;
+		if (!$e) return $email;
 	}
 }
 function h($str)
@@ -73,19 +74,19 @@ function h($str)
 }
 function s(int $bytes)
 {
-	if ($bytes >= 1048576)
-		return ceil($bytes / 1048576). 'MB';
-	elseif ($bytes >= 1024)
-		return ceil($bytes / 1024). 'kB';
+	if (1048576 <= $bytes)
+		return ceil($bytes/1048576). 'MB';
+	elseif (1024 <= $bytes)
+		return ceil($bytes/1024). 'kB';
 	else
 		return $bytes. 'B';
 }
 function l($str)
 {
-	if (stripos($str, '<script') !== false) $str = preg_replace('/(<script[^>]*>.*?<\/script>)/is', '', $str);
-	if (stripos($str, '<style') !== false) $str = preg_replace('/(<style[^>]*>.*?<\/style>)/is', '', $str);
-	if (stripos($str, '</tr>') !== false || stripos($str, '</p>') !== false || stripos($str, '<br>') !== false) $str = str_replace(['</tr>', '</p>', '<br>'], '&#10;', $str);
-	if (stripos($str, '<a') !== false)
+	if (false !== stripos($str, '<script')) $str = preg_replace('/(<script[^>]*>.*?<\/script>)/is', '', $str);
+	if (false !== stripos($str, '<style')) $str = preg_replace('/(<style[^>]*>.*?<\/style>)/is', '', $str);
+	if (false !== stripos($str, '</tr>') || false !== stripos($str, '</p>') || false !== stripos($str, '<br>')) $str = str_replace(['</tr>', '</p>', '<br>'], '&#10;', $str);
+	if (false !== stripos($str, '<a'))
 	{
 		$str = h(strip_tags($str, '<a>'));
 		$str = preg_replace_callback('|(&lt;a.*?/a&gt;)|isu', function ($m) {return htmlspecialchars_decode($m[1]);}, $str);
@@ -158,7 +159,7 @@ function m($m)
 					if ($imap = imap_open('{'. $ini['account'. $i]['host']. ':'. $ini['account'. $i]['port']. '/'. $protocol. '/novalidate-cert}INBOX', $ini['account'. $i]['user'], base64_decode($ini['account'. $i]['passwd']), OP_SILENT, 0) or $last_error = imap_last_error())
 					{
 						$d = imap_num_msg($imap);
-						if ($d > 0)
+						if (0 < $d)
 						{
 							$sort = imap_sort($imap, SORTDATE, 1, SE_UID);
 							$notify .= 'new Notification("'. h($ini['account'. $i]['name']). '",{icon:"./icon.png",body:"新着メールが'. $d. '件あります。"});';
@@ -185,7 +186,7 @@ function m($m)
 
 								if (isset($headerinfo->subject))
 								{
-									if (stripos($headerinfo->subject, '=?') !== false)
+									if (false !== stripos($headerinfo->subject, '=?'))
 										$subject = mb_decode_mimeheader($headerinfo->subject);
 									else
 										$subject = $headerinfo->subject;
@@ -194,23 +195,23 @@ function m($m)
 									$subject = h(trim(str_replace(['/', ':', '!', '?', '&'], '-', $subject)));
 
 									if (isset($headerinfo->from[0]->personal))
-										$personal = stripos($headerinfo->from[0]->personal, '=?') !== false ? h(mb_decode_mimeheader($headerinfo->from[0]->personal)) : h($headerinfo->from[0]->personal);
+										$personal = false !== stripos($headerinfo->from[0]->personal, '=?') ? h(mb_decode_mimeheader($headerinfo->from[0]->personal)) : h($headerinfo->from[0]->personal);
 									else
 										$personal = h($headerinfo->from[0]->mailbox);
 
 									$header = str_replace("\r\n", '&#10;', h(imap_fetchbody($imap, $k, '0')));
 
-									if (stripos($header, '=?') !== false) $header = mb_decode_mimeheader($header);
+									if (false !== stripos($header, '=?')) $header = mb_decode_mimeheader($header);
 
 									$structure = imap_fetchstructure($imap, $k);
 
 									if (!$body = trim(imap_fetchbody($imap, $k, '1.1'))) $body = trim(imap_fetchbody($imap, $k, '1'));
 
-									if ($structure->parameters[0]->attribute === 'CHARSET')
+									if ('CHARSET' === $structure->parameters[0]->attribute)
 										$charset = trim($structure->parameters[0]->value);
-									elseif ($structure->parts[0]->parameters[0]->attribute === 'CHARSET')
+									elseif ('CHARSET' === $structure->parts[0]->parameters[0]->attribute)
 										$charset = trim($structure->parts[0]->parameters[0]->value);
-									elseif ($structure->parts[0]->parts[0]->parameters[0]->attribute === 'CHARSET')
+									elseif ('CHARSET' === $structure->parts[0]->parts[0]->parameters[0]->attribute)
 										$charset = trim($structure->parts[0]->parts[0]->parameters[0]->value);
 									else
 										$charset = 'auto';
@@ -222,12 +223,12 @@ function m($m)
 									elseif (isset($structure->encoding))
 										$encoding = $structure->encoding;
 
-									if ($encoding === 3)
+									if (3 === $encoding)
 										$body = imap_base64($body);
-									elseif ($encoding === 4)
+									elseif (4 === $encoding)
 										$body = imap_qprint($body);
 
-									$body = isset($charset) && strtoupper($charset) !== 'UTF-8' && strtoupper($charset) !== 'X-UNKNOWN' ?
+									$body = isset($charset) && 'UTF-8' !== strtoupper($charset) && 'X-UNKNOWN' !== strtoupper($charset) ?
 										mb_convert_encoding($body, 'UTF-8', $charset) : mb_convert_encoding($body, 'UTF-8', 'auto');
 
 									$body = l($body);
@@ -243,34 +244,35 @@ function m($m)
 										echo
 										'					<ul id="t', $i, '-', $k, '" class=header>', $n,
 										'						<li class=delete><input type=checkbox id="c', $i, '-', $k, '" value="', $i, '+', $k, '" name=delete[] class=del><label for="c', $i, '-', $k, '">削除</label></li>', $n,
-										'						<li class=subject>', $subject, (isset($structure->parts) && count($structure->parts)-1 > 0 ? ' <sup>添付x'. (count($structure->parts)-1). '</sup>' : ''), '</li>', $n,
+										'						<li class=subject>', $subject, (isset($structure->parts) && 0 < count($structure->parts)-1 ? ' <sup>添付x'. (count($structure->parts)-1). '</sup>' : ''), '</li>', $n,
 										'						<li class=from>', $personal, ' &lt;', $from, '&gt;</li>', $n,
 										'						<li class=date>', date('Y年n月j日 H時i分s秒', strtotime($headerinfo->Date)), '</li>', $n,
 										'						<li class=size>', s($headerinfo->Size), '</li>', $n,
 										'						<li><a onclick="scrl(\'#t', $i, '-', $k, '\',\'#col', $i, '-', $k, '\');this.text=(this.text===\'表示\'?\'閉じる\':\'表示\')" id="a', $i, '-', $k, '">表示</a></li>', $n,
-										'						<li><a onclick="$(this).attr(\'download\',\'', $subject, '.txt\').attr(\'href\',\'data:application/octet-stream,\'+encodeURIComponent($(\'#d', $i, '-', $k, '\').text()))">保存</a></li>', $n,
+										'						<li><a onclick="$(this).attr(\'download\',\'', $subject, '.txt\').attr(\'href\',\'data:application/octet-stream,\'+encodeURIComponent(', (!$save_header ? '' : '$(\'#h'. $i. '-'. $k. '\').text()+'), '$(\'#d', $i, '-', $k, '\').text()))">保存</a></li>', $n,
 										'					</ul>', $n,
 										'					<div id="col', $i, '-', $k, '" class=body>', $n,
 										'						<div class=detail>', $n;
-										if (isset($structure->parts) && count($structure->parts)-1 > 0)
+										if (isset($structure->parts) && 0 < count($structure->parts)-1)
 										{
 											echo
 											'							<ol class=attachment>';
 											for ($h=1, $atts=count($structure->parts)-1; $h <= $atts; ++$h)
 											{
-												$attachment = imap_fetchbody($imap, $k, $h + 1);
+												$attachment = imap_fetchbody($imap, $k, $h+1);
 												if (isset($structure->parts[$h]))
 												{
-													if (strtoupper($structure->parts[$h]->subtype) !== 'HTML')
+													if ('HTML' !== strtoupper($structure->parts[$h]->subtype))
 													{
-														if ($structure->parts[$h]->encoding === 3)
+														if (3 === $structure->parts[$h]->encoding)
 														{
-															$attachname = stripos($structure->parts[$h]->parameters[0]->value, '=?') !== false ?
-															mb_decode_mimeheader($structure->parts[$h]->parameters[0]->value):
-															$structure->parts[$h]->parameters[0]->value;
+															$attachname = false !== stripos($structure->parts[$h]->parameters[0]->value, '=?') ?
+																mb_decode_mimeheader($structure->parts[$h]->parameters[0]->value)
+															:
+																$structure->parts[$h]->parameters[0]->value;
 															$attach = 'base64,'. str_replace("\r\n", '', $attachment);
 														}
-														elseif ($structure->parts[$h]->encoding === 4)
+														elseif (4 === $structure->parts[$h]->encoding)
 														{
 															$attachname = quoted_printable_decode($structure->parts[$h]->parameters[0]->value);
 															$attach = 'quoted-printable,'. str_replace("\r\n", '', $attachment);
@@ -284,7 +286,7 @@ function m($m)
 															echo '<li><a onclick="$(this).attr(\'download\',\'', $attachname, '\').attr(\'href\',\'data:application/octet-stream;', $attach, '\')">', $attachname, '</a></li>';
 													}
 												}
-												elseif ($structure->parts[$h]->encoding === 0)
+												elseif (0 === $structure->parts[$h]->encoding)
 												{
 													$body = str_replace(">\r\n<", '><', mb_convert_encoding($attachment, 'UTF-8', $structure->parts[$h]->parameters[0]->value));
 													$body = str_replace("\r\n", '&#10;', trim(strip_tags($body, ['a', 'br'])));
@@ -325,9 +327,9 @@ function m($m)
 						imap_close($imap);
 					}
 				}
-				if ($delete) exit('<script>location.replace("./")</script><meta http-equiv=refresh content="0;URL=./?d">');
-				echo $n, is_readable($rc) ?
-				'				<button accesskey=d tabindex=1 type=submit id=del>選択したメールを削除する</button>' : '', $n;
+				if ($delete) exit ('<script>location.replace("./")</script><meta http-equiv=refresh content="0;URL=./?d">');
+				echo $n, !is_readable($rc) ? '' :
+				'				<button accesskey=d tabindex=1 type=submit id=del>選択したメールを削除する</button>', $n;
 			}
 			else
 			{
@@ -335,11 +337,12 @@ function m($m)
 				'				<section>', $n,
 				'					<h1>使用方法</h1>', $n,
 				'					<ol class=usage>', $n,
-				'						<li><strong>.poptrayrc</strong> を <strong>AltTrayPlus/</strong> にコピーするか、下のフォームから作成します。</li>', $n,
-				'						<li>歯車アイコンをクリックするとアカウントの編集と追加を行えます。</li>', $n,
+				'						<li><strong>~/.poptrayrc</strong> を <strong>', __DIR__,'</strong> にコピーするか、下のフォームから作成します。</li>', $n,
+				'						<li>アカウントの追加と編集は歯車アイコンからも行えます。</li>', $n,
 				'						<li>メール削除は、各メールの「削除」ボタンをクリックしてから、「選択したメールを削除する」ボタンを押します。</li>', $n,
-				'						<li>オンライン時のみ自動でメールチェックを行います。当該間隔は、<strong>AltTrayPlus/index.php</strong> をテキストエディタで開き、『<code>$refresh</code>』の値を変更して下さい。</li>', $n,
-				'						<li>スパムメールを自動削除する場合は、<strong>AltTrayPlus/blacklist.txt</strong> にメールアドレスを一行づつ入力します。</li>', $n,
+				'						<li>自動チェックはオンライン接続時のみ行います。間隔を変更する場合は、<strong>', __FILE__,'</strong> をテキストエディタで開き、『<code>$refresh</code>』の値を変更して下さい。</li>', $n,
+				'						<li>スパムメールを自動削除する場合は、<strong>AltTrayPlus/blacklist.txt</strong> にメールアドレスもしくはドメイン名を一行ずつ入力します。</li>', $n,
+				'						<li>メールの保存にヘッダを含める場合は、『<code>$save_header</code>』を <strong>true</strong> とします。</li>', $n,
 				'					</ol>', $n,
 				'				</section>', $n,
 				'				<section>', $n,
@@ -349,7 +352,7 @@ function m($m)
 			}?>
 			</form>
 		</main>
-		<script>(function l(){setTimeout(function(){if(navigator.onLine){location.reload()}l()},<?=$refresh?>)})();<?=$total > 0 ? 'document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(function(p){if(p==="granted"){'. $notify. '}})' : ''?></script>
+		<script>(function l(){setTimeout(function(){if(navigator.onLine){location.reload()}l()},<?=$refresh?>)})();<?=0 < $total ? 'document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(function(p){if("granted"===p){'. $notify. '}})' : ''?></script>
 		<footer>&copy; <?=date('Y')?> AltTray Plus, <?=round((hrtime(true) - $time_start)/1e9, 4), '秒, ', s(memory_get_usage() - $base_mem)?>.</footer>
 	</body>
 </html>
