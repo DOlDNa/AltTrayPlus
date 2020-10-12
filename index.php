@@ -253,7 +253,7 @@ function m($m)
 										'					</ul>', $n,
 										'					<div id="col', $i, '-', $k, '" class=body>', $n,
 										'						<div class=detail>', $n;
-										if (isset($structure->parts) && 0 < count($structure->parts)-1 && stripos(false === 'multipart/report', $header) && stripos(false === 'delivery-status', $header))
+										if (isset($structure->parts) && 0 < count($structure->parts)-1 && false === stripos('multipart/report', $header) && false === stripos('delivery-status', $header))
 										{
 											echo
 											'							<ol class=attachment>';
