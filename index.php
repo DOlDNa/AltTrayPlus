@@ -262,7 +262,7 @@ function m($m)
 												$attachment = imap_fetchbody($imap, $k, $h+1);
 												if (isset($structure->parts[$h]))
 												{
-													if ('HTML' !== strtoupper($structure->parts[$h]->subtype))
+													if ('HTML' !== strtoupper($structure->parts[$h]->subtype) && 'PGP-SIGNATURE' !== strtoupper($structure->parts[$h]->subtype))
 													{
 														if (3 === $structure->parts[$h]->encoding)
 														{
