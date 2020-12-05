@@ -36,7 +36,7 @@ if (!$delete && $a = filter_input_array(INPUT_POST, [
 			'passwd="'. ($a['password'][$l] ? trim(base64_encode($a['password'][$l]), '=') : $ini['account'. $l]['passwd'] ?? ''). '"'. $n.
 			'protocol='. trim($a['protocol'][$l]). $n. $n;
 	}
-	if (isset($accounts)) file_put_contents('.poptrayrc', implode($accounts), LOCK_EX);
+	if (isset ($accounts)) file_put_contents('.poptrayrc', implode($accounts), LOCK_EX);
 	exit (header('Location: ./'));
 }
 function f(int $i)
@@ -49,11 +49,11 @@ function f(int $i)
 						<input name=user[] type=text placeholder="ユーザー: user@example.com" value="'. ($ini['account'. $i]['user'] ?? ''). '">
 						<input name=host[] type=text placeholder="ホスト: mail.example.com" value="'. ($ini['account'. $i]['host'] ?? ''). '">
 						<input name=port[] type=text placeholder="ポート: 995" value="'. ($ini['account'. $i]['port'] ?? ''). '">
-						<input name=password[] type=text placeholder="パスワード: '. (isset($ini['account'. $i]['passwd']) ? '変更時のみ入力' : 'xxxxxxxx'). '">
-						<select name=protocol[] tabindex=-1>'. (isset($ini['account'. $i]['protocol']) ? '' : '<option selected disabled>プロトコル: 選択して下さい</option>'). '
-							<option value="POP3 SSL"'. (isset($ini['account'. $i]['protocol']) && 'POP3 SSL' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>POP3 SSL</option>
-							<option value="POP3"'. (isset($ini['account'. $i]['protocol']) && 'POP3' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>POP3</option>
-							<option value="IMAP"'. (isset($ini['account'. $i]['protocol']) && 'IMAP' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>IMAP</option>
+						<input name=password[] type=text placeholder="パスワード: '. (isset ($ini['account'. $i]['passwd']) ? '変更時のみ入力' : 'xxxxxxxx'). '">
+						<select name=protocol[] tabindex=-1>'. (isset ($ini['account'. $i]['protocol']) ? '' : '<option selected disabled>プロトコル: 選択して下さい</option>'). '
+							<option value="POP3 SSL"'. (isset ($ini['account'. $i]['protocol']) && 'POP3 SSL' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>POP3 SSL</option>
+							<option value="POP3"'. (isset ($ini['account'. $i]['protocol']) && 'POP3' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>POP3</option>
+							<option value="IMAP"'. (isset ($ini['account'. $i]['protocol']) && 'IMAP' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>IMAP</option>
 						</select>
 					</fieldset>';
 }
@@ -95,7 +95,8 @@ function l($str)
 	}
 	else
 	{
-		$str = preg_replace_callback('|(https?://[ \w#$%&()+-./:;’=?~@\]\[]+[[:alnum:]]/?)|iu', 'm', $str);
+		$pat = 'https?://[ \w#$%&()+-./:;’=?~@\]\[]+[[:alnum:]]/?';
+		$str = preg_replace_callback('!\(('. $pat. ')\)|('. $pat. ')!iu', 'm', $str);
 		$str = h($str);
 		$str = preg_replace_callback('|(&lt;a.*?/a&gt;)|isu', function ($m) {return htmlspecialchars_decode($m[1]);}, $str);
 		$str = str_replace(["\r\n", "\r", "\n",], '&#10;', $str);
@@ -104,7 +105,8 @@ function l($str)
 }
 function m($m)
 {
-	return '<a href="'. $m[1]. '" target="_blank" rel="noopener noreferrer">'. $m[1]. '</a>';
+	$l = $m[1] ?: $m[0];
+	return '<a href="'. $l. '" target="_blank" rel="noopener noreferrer">'. $l. '</a>';
 }
 ?>
 <!doctype html>
@@ -115,16 +117,16 @@ function m($m)
 		<title>AltTray Plus 2</title>
 		<link href=alt.css rel=stylesheet>
 		<link href=icon.svg rel=icon sizes=any type="image/svg+xml">
+		<script src=jquery-3.5.1.min.js></script>
 	</head>
 	<body>
 		<header>
-			<h1><a href="./"><img src=icon.svg alt=alt width=64 height=50> AltTray Plus 2 <sup>β</sup></a></h1>
-			<?=filter_has_var(INPUT_GET, 'config') ? '' : '<a href="./?config"><img src="Cog_font_awesome.svg" alt=conf data-license="Dave Gandy CC BY-SA 3.0" width=32 height=32></a>', $n?>
-			<script src=js/ async></script>
+			<h1><a tabindex="-1" href="./"><img decoding=async src=icon.svg alt=alt width=64 height=50> AltTray Plus 2 <sup>β</sup></a></h1>
+			<?=filter_has_var(INPUT_GET, 'config') ? '' : '<a href="./?config" tabindex=-1><img decoding=async src="Cog_font_awesome.svg" alt=conf data-license="Dave Gandy CC BY-SA 3.0" width=32 height=32></a>', $n?>
 		</header>
 		<main>
 			<form method=post><?php ob_flush();
-			if (isset($ini))
+			if (isset ($ini))
 			{
 				$c = count($ini);
 				if (filter_has_var(INPUT_GET, 'config'))
@@ -149,7 +151,7 @@ function m($m)
 				}
 				for ($i=0; $i < $c; ++$i)
 				{
-					if (!isset($ini['account'. $i]['name'], $ini['account'. $i]['host'], $ini['account'. $i]['port'], $ini['account'. $i]['user'], $ini['account'.$i]['protocol'], $ini['account'. $i]['passwd'])) continue;
+					if (!isset ($ini['account'. $i]['name'], $ini['account'. $i]['host'], $ini['account'. $i]['port'], $ini['account'. $i]['user'], $ini['account'.$i]['protocol'], $ini['account'. $i]['passwd'])) continue;
 					switch ($ini['account'.$i]['protocol'])
 					{
 						case 'POP3 SSL': $protocol = 'pop3/ssl'; break;
@@ -181,10 +183,10 @@ function m($m)
 										}
 									}
 								}
-								$from = isset($headerinfo->sender[1]) ?
+								$from = isset ($headerinfo->sender[1]) ?
 									h($headerinfo->sender[1]->mailbox. '@'. $headerinfo->sender[1]->host) : h($headerinfo->from[0]->mailbox. '@'. $headerinfo->from[0]->host);
 
-								if (isset($headerinfo->subject))
+								if (isset ($headerinfo->subject))
 								{
 									if (false !== stripos($headerinfo->subject, '=?'))
 										$subject = mb_decode_mimeheader($headerinfo->subject);
@@ -194,7 +196,7 @@ function m($m)
 									$subject = str_replace(["\r\n", $n, '&#10;'], '', $subject);
 									$subject = h(trim(str_replace(['/', ':', '!', '?', '&'], '-', $subject)));
 
-									if (isset($headerinfo->from[0]->personal))
+									if (isset ($headerinfo->from[0]->personal))
 										$personal = false !== stripos($headerinfo->from[0]->personal, '=?') ? h(mb_decode_mimeheader($headerinfo->from[0]->personal)) : h($headerinfo->from[0]->personal);
 									else
 										$personal = h($headerinfo->from[0]->mailbox);
@@ -216,11 +218,11 @@ function m($m)
 									else
 										$charset = 'auto';
 
-									if (isset($structure->parts[0]->parts[0]->encoding))
+									if (isset ($structure->parts[0]->parts[0]->encoding))
 										$encoding = $structure->parts[0]->parts[0]->encoding;
-									elseif (isset($structure->parts[0]->encoding))
+									elseif (isset ($structure->parts[0]->encoding))
 										$encoding = $structure->parts[0]->encoding;
-									elseif (isset($structure->encoding))
+									elseif (isset ($structure->encoding))
 										$encoding = $structure->encoding;
 
 									if (3 === $encoding)
@@ -228,7 +230,7 @@ function m($m)
 									elseif (4 === $encoding)
 										$body = imap_qprint($body);
 
-									$body = isset($charset) && 'UTF-8' !== strtoupper($charset) && 'X-UNKNOWN' !== strtoupper($charset) ?
+									$body = isset ($charset) && 'UTF-8' !== strtoupper($charset) && 'X-UNKNOWN' !== strtoupper($charset) ?
 										mb_convert_encoding($body, 'UTF-8', $charset) : mb_convert_encoding($body, 'UTF-8', 'auto');
 
 									$body = l($body);
@@ -244,13 +246,15 @@ function m($m)
 										echo
 										'					<ul id="t', $i, '-', $k, '" class=header>', $n,
 										'						<li class=delete><input type=checkbox id="c', $i, '-', $k, '" value="', $i, '+', $k, '" name=delete[] class=del><label for="c', $i, '-', $k, '">削除</label></li>', $n,
-										'						<li class=subject>', $subject, (isset($structure->parts) && 0 < count($structure->parts)-1 ? ' <sup>添付x'. (count($structure->parts)-1). '</sup>' : ''), '</li>', $n,
+										'						<li class=subject>', $subject, (isset ($structure->parts) && 0 < count($structure->parts)-1 ? ' <sup>添付x'. (count($structure->parts)-1). '</sup>' : ''), '</li>', $n,
 										'						<li class=from>', $personal, ' &lt;', $from, '&gt;</li>', $n,
 										'						<li class=date>', date('Y年n月j日 H時i分s秒', strtotime($headerinfo->Date)), '</li>', $n,
 										'						<li class=size>', s($headerinfo->Size), '</li>', $n,
-										'						<li><a onclick="scrl(\'#t', $i, '-', $k, '\',\'#col', $i, '-', $k, '\');this.text=(this.text===\'表示\'?\'閉じる\':\'表示\')" id="a', $i, '-', $k, '">表示</a></li>', $n,
-										'						<li><a onclick="$(this).attr(\'download\',\'', $subject, '.txt\').attr(\'href\',\'data:application/octet-stream,\'+encodeURIComponent(', (!$save_header ? '' : '$(\'#h'. $i. '-'. $k. '\').text()+'), '$(\'#d', $i, '-', $k, '\').text()))">保存</a></li>', $n,
+										'						<li><a tabindex=0 id="a', $i, '-', $k, '">表示</a></li>', $n,
+										'						<li><a tabindex=0 id="i', $i, '-', $k, '">保存</a></li>', $n,
 										'					</ul>', $n,
+										'					<script>$("#i', $i, '-', $k, '").on("click keypress",function(e){if(13===e.keyCode||"click"===e.type){$(this).attr("download","', $subject, '.txt").attr("href","data:application/octet-stream,"+encodeURIComponent(', (!$save_header ? '' : '$("#h'. $i. '-'. $k. '").text()+'), '$("#d', $i, '-', $k, '").text()))}});$("#a', $i, '-', $k, '").on("click keypress",function(e){if(13===e.keyCode||"click"===e.type){scrl("#t', $i, '-', $k, '","#col', $i, '-', $k, '");this.text=("表示"===this.text?"閉じる":"表示")}})</script>', $n,
+
 										'					<div id="col', $i, '-', $k, '" class=body>', $n,
 										'						<div class=detail>', $n;
 										if (isset($structure->parts) && 0 < count($structure->parts)-1 && false === stripos('multipart/report', $header) && false === stripos('delivery-status', $header))
@@ -260,7 +264,8 @@ function m($m)
 											for ($h=1, $atts=count($structure->parts)-1; $h <= $atts; ++$h)
 											{
 												$attachment = imap_fetchbody($imap, $k, $h+1);
-												if (isset($structure->parts[$h]))
+
+												if (isset ($structure->parts[$h]) && 'DELIVERY-STATUS' !== strtoupper($structure->parts[$h]->subtype))
 												{
 													if ('HTML' !== strtoupper($structure->parts[$h]->subtype) && 'PGP-SIGNATURE' !== strtoupper($structure->parts[$h]->subtype))
 													{
@@ -282,7 +287,7 @@ function m($m)
 															$attachname = htmlentities($structure->parts[$h]->parameters[0]->value, ENT_QUOTES);
 															$attach = 'charset=UTF-8,'. rawurlencode($attachment);
 														}
-														if (isset($attach, $attachname))
+														if (isset ($attach, $attachname))
 															echo '<li><a onclick="$(this).attr(\'download\',\'', $attachname, '\').attr(\'href\',\'data:application/octet-stream;', $attach, '\')">', $attachname, '</a></li>';
 													}
 												}
@@ -299,11 +304,13 @@ function m($m)
 										'							<p id="h', $i, '-', $k, '" class=mimeheader>', $header, !$body ? print_r($structure) : '', '</p>', $n,
 										'						</div>', $n,
 										'						<div class=footer>', $n,
-										'							<a onclick="scrl(\'#b', $i, '-', $k, '\',\'#h', $i, '-', $k, '\');this.text=(this.text===\'ヘッダーを表示する\'?\'ヘッダーを閉じる\':\'ヘッダーを表示する\')" class=view>ヘッダーを表示する</a>', $n,
-										'							<a onclick="scrl(\'#t', $i, '-', $k, '\',\'#col', $i, '-', $k, '\');$(\'#a', $i, '-', $k, '\').text(\'表示\')">閉じる</a>', $n,
-										'							<a onclick="delc(\'#c', $i, '-', $k, '\');scrl(\'#t', $i, '-', $k, '\',\'#col', $i, '-', $k, '\');$(\'#a', $i, '-', $k, '\').text(\'表示\')">削除にチェックを入れて閉じる</a>', $n,
+										'							<a tabindex=0 id="x', $i, '-', $k, '" class=view>ヘッダーを表示する</a>', $n,
+										'							<a tabindex=0 id="y', $i, '-', $k, '">閉じる</a>', $n,
+										'							<a tabindex=0 id="z', $i, '-', $k, '">削除にチェックを入れて閉じる</a>', $n,
 										'						</div>', $n,
-										'					</div>', $n;
+										'					</div>', $n,
+										'					<script>$("#x', $i, '-', $k, '").on("click keypress",function(e){if(13===e.keyCode||"click"===e.type){scrl("#b', $i, '-', $k, '","#h', $i, '-', $k, '");this.text=("ヘッダーを表示する"===this.text?"ヘッダーを閉じる":"ヘッダーを表示する")}});$("#y', $i, '-', $k, '").on("click keypress",function(e){if(13===e.keyCode||"click"===e.type){scrl("#t', $i, '-', $k, '","#col', $i, '-', $k, '");$("#a', $i, '-', $k, '").text("表示")}});$("#z', $i, '-', $k, '").on("click keypress",function(e){if(13===e.keyCode||"click"===e.type){delc("#c', $i, '-', $k, '");scrl("#t', $i, '-', $k, '","#col', $i, '-', $k, '");$("#a', $i, '-', $k, '").text("表示")}})
+										</script>', $n;
 									}
 								}
 							}
@@ -329,7 +336,7 @@ function m($m)
 				}
 				if ($delete) exit ('<script>location.replace("./")</script><meta http-equiv=refresh content="0;URL=./?d">');
 				echo $n, !is_readable($rc) ? '' :
-				'				<button accesskey=d tabindex=1 type=submit id=del>選択したメールを削除する</button>', $n;
+				'				<button type=submit tabindex=0 id=del>選択したメールを削除する</button>', $n;
 			}
 			else
 			{
@@ -337,10 +344,10 @@ function m($m)
 				'				<section>', $n,
 				'					<h1>使用方法</h1>', $n,
 				'					<ol class=usage>', $n,
-				'						<li><strong>~/.poptrayrc</strong> を <strong>', __DIR__,'</strong> にコピーするか、下のフォームから作成します。</li>', $n,
+				'						<li><strong>~/.poptrayrc</strong> を <strong>', __DIR__, '</strong> にコピーするか、下のフォームから作成します。</li>', $n,
 				'						<li>アカウントの追加と編集は歯車アイコンからも行えます。</li>', $n,
 				'						<li>メール削除は、各メールの「削除」ボタンをクリックしてから、「選択したメールを削除する」ボタンを押します。</li>', $n,
-				'						<li>自動チェックはオンライン接続時のみ行います。間隔を変更する場合は、<strong>', __FILE__,'</strong> をテキストエディタで開き、『<code>$refresh</code>』の値を変更して下さい。</li>', $n,
+				'						<li>自動チェックはオンライン接続時のみ行います。間隔を変更する場合は、<strong>', __FILE__, '</strong> をテキストエディタで開き、『<code>$refresh</code>』の値を変更して下さい。</li>', $n,
 				'						<li>スパムメールを自動削除する場合は、<strong>AltTrayPlus/blacklist.txt</strong> にメールアドレスもしくはドメイン名を一行ずつ入力します。</li>', $n,
 				'						<li>メールの保存にヘッダを含める場合は、『<code>$save_header</code>』を <strong>true</strong> とします。</li>', $n,
 				'					</ol>', $n,
@@ -352,7 +359,7 @@ function m($m)
 			}?>
 			</form>
 		</main>
-		<script>(function l(){setTimeout(function(){if(navigator.onLine){location.reload()}l()},<?=$refresh?>)})();<?=0 < $total ? 'document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(function(p){if("granted"===p){'. $notify. '}})' : ''?></script>
+		<script>$(function(){if(0<$('.del:checked').length){$('#del').slideDown()}else{$('#del').slideUp()}$('.del').change(function(){if(this.checked)$('#del').slideDown();else if(0===$('.del:checked').length)$('#del').slideUp()})});function scrl(t,c){$('body,html').animate({scrollTop:$(t).offset().top});$(c).slideToggle()}function delc(id){$(id).prop('checked',true);$('.del').change()}let a='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),i=0;$('a[tabindex=0],button[tabindex=0]').each(function(i){$(this).attr('accesskey',a[i])});(function l(){setTimeout(function(){if(navigator.onLine){location.reload()}l()},<?=$refresh?>)})();<?=0 < $total ? 'document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(function(p){if("granted"===p){'. $notify. '}})' : ''?></script>
 		<footer>&copy; <?=date('Y')?> AltTray Plus, <?=round((hrtime(true) - $time_start)/1e9, 4), '秒, ', s(memory_get_usage() - $base_mem)?>.</footer>
 	</body>
 </html>
