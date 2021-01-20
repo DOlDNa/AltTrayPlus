@@ -287,7 +287,7 @@ function m($m)
 															$attachname = htmlentities($structure->parts[$h]->parameters[0]->value, ENT_QUOTES);
 															$attach = 'charset=UTF-8,'. rawurlencode($attachment);
 														}
-														if (isset ($attach, $attachname))
+														if (isset ($attach, $attachname) && 'null' !== $attachname)
 															echo '<li><a onclick="$(this).attr(\'download\',\'', $attachname, '\').attr(\'href\',\'data:application/octet-stream;', $attach, '\')">', $attachname, '</a></li>';
 													}
 												}
