@@ -95,7 +95,7 @@ function l($str)
 	}
 	else
 	{
-		$pat = 'https?://[ \w#$%&()+-./:;’=?~@\]\[]+[[:alnum:]]/?';
+		$pat = 'https?://[\w#$%&()+-./:;’=?~@\]\[]+[[:alnum:]]/?';
 		$str = preg_replace_callback('!\(('. $pat. ')\)|('. $pat. ')!iu', 'm', $str);
 		$str = h($str);
 		$str = preg_replace_callback('|(&lt;a.*?/a&gt;)|isu', function ($m) {return htmlspecialchars_decode($m[1]);}, $str);
