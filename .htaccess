@@ -1,29 +1,23 @@
 <Files .poptrayrc>
 Require all denied
 </Files>
-
 EnableMMAP Off
 FileETag None
-
-<ifModule mod_deflate.c>
-AddOutputFilterByType DEFLATE text/html text/css text/javascript application/x-javascript application/x-httpd-php
-</ifModule>
-
 <IfModule mod_headers.c>
 Header unset ETag
+Header append Vary: Accept-Encoding env=!dont-vary
 Header set X-Frame-Options SAMEORIGIN
 Header set X-Content-Type-Options "nosniff"
 Header set X-XSS-Protection "1; mode=block"
-Header set X-Powered-By "AltTrayPlus/2"
-
+Header set X-Powered-By "AltTrayPlus/2.1"
 <FilesMatch "\.(css|js|png|svg)$">
-
 <IfModule mod_expires.c>
 ExpiresActive On
 ExpiresDefault "access plus 1 weeks"
 </IfModule>
-Header unset ETag
-Header append Vary: Accept-Encoding
 </FilesMatch>
-
 </IfModule>
+<ifModule mod_deflate.c>
+SetOutputFilter DEFLATE
+SetEnvIf Request_URI \.png$ no-gzip dont-vary
+</ifModule>
