@@ -1,9 +1,9 @@
-# AltTray Plus 2
+# AltTray Plus 2.1
 
 ## 概要
 
 ローカルホスト専用のメールリーダーです。
-ブラウザ上で「メールチェック」、「内容確認」、「テキストで保存」、「添付ファイルの保存」、「メールの削除」をすることができます。
+ブラウザ上で「メールチェック」、「内容確認」、「テキストで保存」、「ヘッダ付テキストで保存」、「添付ファイルの保存」、「メールの削除」をすることができます。
 「送信」と「返信」はできません。
 
 メール本文の HTML タグは除去されるため、素早く安全に内容確認することができます。
@@ -40,5 +40,5 @@ PopTray Minus ユーザーは「[.poptrayrc がある場合](#poptrayrc-があ�
 
 ## 謝辞
 
-本ソフトウェアには、[PopTray Minus](http://server-pro.com/poptrayminus/) の設定ファイルである .poptrayrc と [jQuery](http://jquery.com/) を使用しました。
+本ソフトウェアには、[PopTray Minus](http://server-pro.com/poptrayminus/) の設定ファイルである .poptrayrc を使用しました。
 また、Cog_font_awesome.svg は Dave Gandy 氏の作品であり CC BY-SA 3.0 が適用されています。
