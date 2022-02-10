@@ -340,7 +340,6 @@ echo
 						'<li>メール削除は、各メールの「削除」ボタンをクリックしてから、「選択したメールを削除する」ボタンを押します。</li>',
 						'<li>自動チェックはオンライン接続時のみ行います。間隔を変更する場合は、<strong>', __FILE__, '</strong> をテキストエディタで開き、『<code>$refresh</code>』の値を変更して下さい。</li>',
 						'<li>スパムメールを自動削除する場合は、<strong>AltTrayPlus/blacklist.txt</strong> にメールアドレスもしくはドメイン名を一行ずつ入力します。</li>',
-						'<li>メールの保存にヘッダを含める場合は、『<code>$save_header</code>』を <strong>true</strong> とします。</li>',
 					'</ol>',
 				'</section>',
 				'<section>',
