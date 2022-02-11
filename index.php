@@ -5,7 +5,7 @@ $refresh = 9e5; # 9×10^5 = 15分
 
 header('Pragma: no-cache');
 date_default_timezone_set('Asia/Tokyo');
-#error_reporting(0);
+error_reporting(0);
 ob_implicit_flush(1);
 imap_timeout(IMAP_READTIMEOUT, 3);
 $n = PHP_EOL;
@@ -349,7 +349,7 @@ echo
 			} echo
 			'</form>',
 		'</main>',
-		'<script>let del=document.getElementById("del");if(0<document.querySelectorAll(".del:checked").length)del.classList.remove("hide");[].slice.call(document.querySelectorAll(".del")||[]).map(d=>d.addEventListener("click",t=>{if(0===document.querySelectorAll(".del:checked").length)del.classList.add("hide");else del.classList.remove("hide")}));setTimeout(()=>{if(navigator.onLine)location.reload()},', $refresh, ')', (0 > $total ? '' : ';document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(function(p){if("granted"===p){'. $notify. '}})'),
+		'<script>let del=document.getElementById("del");if(0<document.querySelectorAll(".del:checked").length)del.classList.remove("hide");[].slice.call(document.querySelectorAll(".del")||[]).map(d=>d.addEventListener("click",t=>{if(0===document.querySelectorAll(".del:checked").length)del.classList.add("hide");else del.classList.remove("hide")}));(function l(){setTimeout(()=>{if(navigator.onLine)location.reload();l()},', $refresh, ')})()', (!$total ? '' : ';document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(p=>{if("granted"===p){'. $notify. '}})'),
 		'</script>',
 		'<footer>&copy; ', date('Y'), ' AltTray Plus, ', round((hrtime(true) - $time_start)/1e9, 4), '秒, ', s(memory_get_usage() - $base_mem), '.</footer>',
 	'</body>',
