@@ -15,45 +15,49 @@ $delete = !filter_has_var(INPUT_POST, 'delete') ? '' : filter_input(INPUT_POST, 
 if (!is_file($blacklist = './blacklist.txt')) file_put_contents($blacklist, '');
 if (is_file($rc = '.poptrayrc') && is_readable($rc)) $ini = parse_ini_file($rc, true);
 if (!$delete && $a = filter_input_array(INPUT_POST, [
-	'title' => ['filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS, 'flags' => FILTER_REQUIRE_ARRAY],
-	'name' => ['filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS, 'flags' => FILTER_REQUIRE_ARRAY],
-	'user' => ['filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS, 'flags' => FILTER_REQUIRE_ARRAY],
-	'host' => ['filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS, 'flags' => FILTER_REQUIRE_ARRAY],
+	'title' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags', 'flags' => FILTER_REQUIRE_ARRAY],
+	'name' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags', 'flags' => FILTER_REQUIRE_ARRAY],
+	'user' => ['filter' => FILTER_CALLBACK, 'options' => 'e', 'flags' => FILTER_REQUIRE_ARRAY+FILTER_FLAG_EMAIL_UNICODE],
+	'host' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags', 'flags' => FILTER_REQUIRE_ARRAY],
 	'port' => ['filter' => FILTER_SANITIZE_NUMBER_INT, 'flags' => FILTER_REQUIRE_ARRAY],
-	'password' => ['filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS, 'flags' => FILTER_REQUIRE_ARRAY],
-	'protocol' => ['filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS, 'flags' => FILTER_REQUIRE_ARRAY],
+	'password' => ['filter' => FILTER_DEFAULT, 'flags' => FILTER_REQUIRE_ARRAY],
+	'protocol' => ['filter' => FILTER_DEFAULT, 'flags' => FILTER_REQUIRE_ARRAY],
 ]))
 {
 	for ($l=0, $e=count($a['name']); $l < $e; ++$l)
 	{
 		if ($a['name'][$l] && $a['host'][$l] && $a['port'][$l] && $a['user'][$l] && $a['protocol'][$l])
-			$accounts[] =
-			$a['title'][$l]. $n.
-			'name='. $a['name'][$l]. $n.
-			'host='. $a['host'][$l]. $n.
-			'port='. $a['port'][$l]. $n.
-			'user='. $a['user'][$l]. $n.
-			'passwd="'. ($a['password'][$l] ? trim(base64_encode($a['password'][$l]), '=') : $ini['account'. $l]['passwd'] ?? ''). '"'. $n.
-			'protocol='. trim($a['protocol'][$l]). $n. $n;
+		$accounts[] =
+		$a['title'][$l]. $n.
+		'name="'. $a['name'][$l]. '"'.$n.
+		'host="'. $a['host'][$l]. '"'.$n.
+		'port="'. $a['port'][$l]. '"'.$n.
+		'user="'. $a['user'][$l]. '"'.$n.
+		'passwd="'. ($a['password'][$l] ? trim(base64_encode($a['password'][$l]), '=') : $ini['account'. $l]['passwd'] ?? ''). '"'. $n.
+		'protocol="'. ($a['protocol'][$l] ?? ''). '"'. $n. $n;
 	}
 	if (isset($accounts)) file_put_contents('.poptrayrc', implode($accounts), LOCK_EX);
 	exit (header('Location: ./'));
 }
+
 function f(int $i)
 {
-	global $ini;
+	global $ini, $accounts;
+	if (isset($accounts[$i])) $ini_str = parse_ini_string($accounts[$i], true);
+	$inis = $ini['account'.$i]['protocol'] ?? $ini_str['account'. $i]['protocol'] ?? '';
 	return
 	'<fieldset>'.
 		'<input name=title[] type=hidden value="[account'. $i. ']">'.
-		'<input name=name[] type=text placeholder="タイトル: TEST 1" value="'. ($ini['account'. $i]['name'] ?? ''). '">'.
-		'<input name=user[] type=text placeholder="ユーザー: user@example.com" value="'. ($ini['account'. $i]['user'] ?? ''). '">'.
-		'<input name=host[] type=text placeholder="ホスト: mail.example.com" value="'. ($ini['account'. $i]['host'] ?? ''). '">'.
-		'<input name=port[] type=text placeholder="ポート: 995" value="'. ($ini['account'. $i]['port'] ?? ''). '">'.
-		'<input name=password[] type=text placeholder="パスワード: '. (isset($ini['account'. $i]['passwd']) ? '変更時のみ入力' : 'xxxxxxxx'). '">'.
-		'<select name=protocol[] tabindex=-1>'. (isset($ini['account'. $i]['protocol']) ? '' : '<option selected disabled>プロトコル: 選択して下さい</option>').
-			'<option value="POP3 SSL"'. (isset($ini['account'. $i]['protocol']) && 'POP3 SSL' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>POP3 SSL</option>'.
-			'<option value="POP3"'. (isset($ini['account'. $i]['protocol']) && 'POP3' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>POP3</option>'.
-			'<option value="IMAP"'. (isset($ini['account'. $i]['protocol']) && 'IMAP' === $ini['account'. $i]['protocol'] ? ' selected' : ''). '>IMAP</option>'.
+		'<input name=name[] type=text placeholder="タイトル: TEST 1" value="'. ($ini['account'. $i]['name'] ?? $ini_str['account'. $i]['name'] ?? ''). '">'.
+		'<input name=user[] type=text placeholder="ユーザー: user@example.com" value="'. ($ini['account'. $i]['user'] ?? $ini_str['account'. $i]['user'] ?? ''). '">'.
+		'<input name=host[] type=text placeholder="ホスト: mail.example.com" value="'. ($ini['account'. $i]['host'] ?? $ini_str['account'. $i]['host'] ?? ''). '">'.
+		'<input name=port[] type=text placeholder="ポート: 995" value="'. ($ini['account'. $i]['port'] ?? $ini_str['account'. $i]['port'] ?? ''). '">'.
+		'<input name=password[] type=text placeholder="パスワード: '. (isset($ini['account'. $i]['passwd']) ? '変更時のみ入力"' : 'xxxxxxxx"'). '>'.
+		'<select name=protocol[] tabindex=-1>'.
+			'<option'. ($inis ? '' : ' selected'). ' disabled value="">プロトコル: 選択して下さい</option>'.
+			'<option value="POP3 SSL"'. ('POP3 SSL' !== $inis ? '' : ' selected'). '>POP3 SSL</option>'.
+			'<option value="POP3"'. ('POP3' !== $inis ? '' : ' selected'). '>POP3</option>'.
+			'<option value="IMAP"'. ('IMAP' !== $inis ? '' : ' selected'). '>IMAP</option>'.
 		'</select>'.
 	'</fieldset>';
 }
@@ -107,6 +111,15 @@ function m($m)
 {
 	$l = $m[1] ?: $m[0];
 	return '<a href="'. $l. '" target="_blank" rel="noopener noreferrer">'. $l. '</a>';
+}
+function e($e)
+{
+	if (filter_var($e, FILTER_VALIDATE_EMAIL)) return $e;
+	elseif (false !== strpos($e, '@'))
+	{
+		$ex = explode('@', $e);
+		return filter_var(idn_to_ascii($ex[0]). '@'. idn_to_ascii($ex[1]), FILTER_SANITIZE_EMAIL);
+	}
 }
 echo
 '<!doctype html>',
