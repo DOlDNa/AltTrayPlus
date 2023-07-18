@@ -284,8 +284,17 @@ echo
 														}
 														elseif (4 === $structure->parts[$h]->encoding)
 														{
-															$attachname = quoted_printable_decode($structure->parts[$h]->parameters[0]->value);
-															$attach = 'quoted-printable,'. str_replace("\r\n", '', $attachment);
+															if (str_contains($attachment, '</'))
+															{
+																$attachname = quoted_printable_decode($structure->parts[$h]->parameters[0]->value);
+																$attachment = base64_encode(quoted_printable_decode($attachment));
+																$attach = 'base64,'. str_replace("\r\n", '', $attachment);
+															}
+															else
+															{
+																$attachname = quoted_printable_decode($structure->parts[$h]->parameters[0]->value);
+																$attach = 'quoted-printable,'. str_replace("\r\n", '', $attachment);
+															}
 														}
 														else
 														{
