@@ -195,7 +195,7 @@ echo
 								if (isset($headerinfo->subject))
 								{
 									if (false !== stripos($headerinfo->subject, '=?'))
-										$subject = mb_decode_mimeheader($headerinfo->subject);
+										$subject = mb_decode_mimeheader(str_replace('= =', '==', $headerinfo->subject));
 									else
 										$subject = $headerinfo->subject;
 
