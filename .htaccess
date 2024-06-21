@@ -9,8 +9,8 @@ Header append Vary: Accept-Encoding env=!dont-vary
 Header set X-Frame-Options SAMEORIGIN
 Header set X-Content-Type-Options "nosniff"
 Header set X-XSS-Protection "1; mode=block"
-Header set X-Powered-By "AltTrayPlus/2.1.1"
-<FilesMatch "\.(css|js|png|svg)$">
+Header set X-Powered-By "AltTrayPlus/2.1.4"
+<FilesMatch "\.(css|js|png)$">
 <IfModule mod_expires.c>
 ExpiresActive On
 ExpiresDefault "access plus 1 weeks"
