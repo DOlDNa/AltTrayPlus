@@ -133,8 +133,8 @@ echo
 	'</head>',
 	'<body>',
 		'<header>',
-			'<h1><a tabindex="-1" href="./"><img decoding=async src=icon.svg alt=alt width=64 height=50> AltTray Plus 2.1 <sup>β</sup></a></h1>', (filter_has_var(INPUT_GET, 'config') ? '' :
-			'<a href="./?config" tabindex=-1><img decoding=async src="Cog_font_awesome.svg" alt=conf data-license="Dave Gandy CC BY-SA 3.0" width=32 height=32></a>'),
+			'<h1><a accesskey=a tabindex="-1" href="./"><img decoding=async src=icon.svg alt=alt width=64 height=50> AltTray Plus 2.1 <sup>β</sup></a></h1>', (filter_has_var(INPUT_GET, 'config') ? '' :
+			'<a href="./?config" tabindex=-1>⚙️</a>'),
 		'</header>',
 		'<main>',
 			'<form method=post>';
@@ -251,7 +251,7 @@ echo
 									{
 										echo
 										'<ul id="t', $i, '-', $k, '" class=header>',
-											'<li class=delete><input type=checkbox id="c', $i, '-', $k, '" value="', $i, '+', $k, '" name=delete[] class=del><label for="c', $i, '-', $k, '">削除</label></li>',
+											'<li class=delete><input type=checkbox id="c', $i, '-', $k, '" value="', $i, '+', $k, '" name=delete[] class=del><label for="c', $i, '-', $k, '" tabindex=1 onkeyup="if(\'Enter\'===event.key){fo=document.getElementById(this.htmlFor);if(true!==fo.checked)fo.checked=true;else fo.checked=false;a()}">削除</label></li>',
 											'<li class=subject>', $subject, (isset($structure->parts) && 0 < count($structure->parts)-1 ? ' <sup>添付x'. (count($structure->parts)-1). '</sup>' : ''), '</li>',
 											'<li class=from>', $personal, ' &lt;', $from, '&gt;</li>',
 											'<li class=date>', date('Y年n月j日 H時i分s秒', strtotime($headerinfo->Date)), '</li>',
@@ -320,7 +320,7 @@ echo
 										'<div class=footer>',
 										'<a tabindex=0 id="x', $i, '-', $k, '" href="#b', $i, '-', $k, '" onclick="document.getElementById(\'h', $i, '-', $k, '\').classList.toggle(\'mimeheader\');this.text=(\'ヘッダを表示する\'===this.text?\'ヘッダを閉じる\':\'ヘッダを表示する\')" class=view>ヘッダを表示する</a>',
 										'<a tabindex=0 id="y', $i, '-', $k, '" href="#t', $i, '-', $k, '" onclick="document.getElementById(\'col', $i, '-', $k, '\').classList.add(\'hide\');document.getElementById(\'a', $i, '-', $k, '\').text=\'表示\'">閉じる</a>',
-										'<a tabindex=0 id="z', $i, '-', $k, '" class=del href="#t', $i, '-', $k, '" onclick="document.getElementById(\'c', $i, '-', $k, '\').checked=true;document.getElementById(\'col', $i, '-', $k, '\').classList.add(\'hide\');document.getElementById(\'a', $i, '-', $k, '\').text=\'表示\'">削除にチェックを入れて閉じる</a>',
+										'<a tabindex=0 id="z', $i, '-', $k, '" class=del href="#t', $i, '-', $k, '" onmouseup="document.getElementById(\'c', $i, '-', $k, '\').checked=true;document.getElementById(\'col', $i, '-', $k, '\').classList.add(\'hide\');document.getElementById(\'a', $i, '-', $k, '\').text=\'表示\'" onkeydown="if(\'Enter\'===event.key){document.getElementById(\'c', $i, '-', $k, '\').checked=true;document.getElementById(\'col', $i, '-', $k, '\').classList.add(\'hide\');document.getElementById(\'a', $i, '-', $k, '\').text=\'表示\';a()}">削除にチェックを入れて閉じる</a>',
 										'</div>',
 										'</div>';
 									}
@@ -371,7 +371,7 @@ echo
 			} echo
 			'</form>',
 		'</main>',
-		'<script>let del=document.getElementById("del");if(0<document.querySelectorAll(".del:checked").length)del.classList.remove("hide");[].slice.call(document.querySelectorAll(".del")||[]).map(d=>d.addEventListener("click",t=>{if(0===document.querySelectorAll(".del:checked").length)del.classList.add("hide");else del.classList.remove("hide")}));(function l(){setTimeout(()=>{if(navigator.onLine)location.reload();l()},', $refresh, ')})()', (!$total ? '' : ';document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(p=>{if("granted"===p){'. $notify. '}})'),
+		'<script>const del=document.getElementById("del");if(0<document.querySelectorAll(".del:checked").length)del.classList.remove("hide"),[].slice.call(document.querySelectorAll(".del")||[]).map(d=>d.onclick=()=>a()),a=()=>{if(0===document.querySelectorAll(".del:checked").length)del.classList.add("hide");else del.classList.remove("hide")},(l=()=>setTimeout(()=>{if(navigator.onLine)location.reload();l()},', $refresh, '))()', (!$total ? '' : ';document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(p=>{if("granted"===p){'. $notify. '}})'),
 		'</script>',
 		'<footer>&copy; ', date('Y'), ' AltTray Plus, ', round((hrtime(true) - $time_start)/1e9, 4), '秒, ', s(memory_get_usage() - $base_mem), '.</footer>',
 	'</body>',
