@@ -41,4 +41,4 @@ PopTray Minus ユーザーは「[.poptrayrc がある場合](#poptrayrc-があ�
 ## 謝辞
 
 本ソフトウェアには、[PopTray Minus](http://server-pro.com/poptrayminus/) の設定ファイルである .poptrayrc を使用しました。
-また、Cog_font_awesome.svg は Dave Gandy 氏の作品であり CC BY-SA 3.0 が適用されています。
+
