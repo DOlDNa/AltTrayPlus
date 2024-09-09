@@ -371,7 +371,7 @@ echo
 			} echo
 			'</form>',
 		'</main>',
-		'<script>const del=document.getElementById("del"),a=()=>{if(0===document.querySelectorAll(".del:checked").length)del.classList.add("hide");else del.classList.remove("hide")};if(0<document.querySelectorAll(".del:checked").length)del.classList.remove("hide"),[].slice.call(document.querySelectorAll(".del")||[]).map(d=>d.onclick=()=>a())(l=()=>setTimeout(()=>{if(navigator.onLine)location.reload();l()},', $refresh, '))()', (!$total ? '' : ';document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(p=>{if("granted"===p){'. $notify. '}})'),
+		'<script>const del=document.getElementById("del"),a=()=>{if(0===document.querySelectorAll(".del:checked").length)del.classList.add("hide");else del.classList.remove("hide")};if(0<document.querySelectorAll(".del:checked").length)del.classList.remove("hide"),[].slice.call(document.querySelectorAll(".del")||[]).map(d=>d.onclick=()=>a());(l=()=>setTimeout(()=>{if(navigator.onLine)location.reload();l()},', $refresh, '))()', (!$total ? '' : ';document.title="'. $total. '件受信 - AltTray Plus 2";Notification.requestPermission(p=>{if("granted"===p){'. $notify. '}})'),
 		'</script>',
 		'<footer>&copy; ', date('Y'), ' AltTray Plus, ', round((hrtime(true) - $time_start)/1e9, 4), '秒, ', s(memory_get_usage() - $base_mem), '.</footer>',
 	'</body>',
