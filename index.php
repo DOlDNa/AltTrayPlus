@@ -95,7 +95,7 @@ function l($str)
 		$str = h(strip_tags($str, '<a>'));
 		$str = preg_replace_callback('|(&lt;a.*?/a&gt;)|isu', function ($m) {return htmlspecialchars_decode($m[1]);}, $str);
 		$str = preg_replace('/(&nbsp;|&zwnj;|\s\s)+/', '', $str);
-		$str = preg_replace('/<a.*?href="(.*?)"[^>]*>(.*?)<\/a>/iu', '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>&#10;', $str);
+		$str = preg_replace('/<a.*?href="(.*?)"[^>]*>(.*?)<\/a>/isu', '<a href="$1" target="_blank" rel="noopener noreferrer">$2</a>&#10;', $str);
 	}
 	else
 	{
@@ -158,12 +158,12 @@ echo
 				for ($i=0; $i < $c; ++$i)
 				{
 					if (!isset($ini['account'. $i]['name'], $ini['account'. $i]['host'], $ini['account'. $i]['port'], $ini['account'. $i]['user'], $ini['account'.$i]['protocol'], $ini['account'. $i]['passwd'])) continue;
-					switch ($ini['account'.$i]['protocol'])
+					match ($ini['account'.$i]['protocol'])
 					{
-						case 'POP3 SSL': $protocol = 'pop3/ssl'; break;
-						case 'IMAP': $protocol = 'imap/ssl'; break;
-						default: $protocol = 'pop3'; break;
-					}
+						'POP3 SSL' => $protocol = 'pop3/ssl',
+						'IMAP' => $protocol = 'imap/ssl',
+						default => $protocol = 'pop3',
+					};
 					if ($imap = imap_open('{'. $ini['account'. $i]['host']. ':'. $ini['account'. $i]['port']. '/'. $protocol. '/novalidate-cert}INBOX', $ini['account'. $i]['user'], base64_decode($ini['account'. $i]['passwd']), OP_SILENT, 0))
 					{
 						$d = imap_num_msg($imap);
