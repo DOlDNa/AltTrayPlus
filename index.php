@@ -305,7 +305,7 @@ echo
 															echo '<li><a download="', $attachname, '" href="data:application/octet-stream;', $attach, '">', $attachname, '</a></li>';
 													}
 												}
-												elseif (0 === $structure->parts[$h]->encoding)
+												elseif (0 === $structure->parts[$h]->encoding && is_array($structure->parts[$h]->parameters))
 												{
 													$body = str_replace(">\r\n<", '><', mb_convert_encoding($attachment, 'UTF-8', $structure->parts[$h]->parameters[0]->value));
 													$body = str_replace("\r\n", '&#10;', trim(strip_tags($body, ['a', 'br'])));
