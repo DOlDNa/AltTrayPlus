@@ -238,9 +238,7 @@ echo
 
 									$body = isset($charset) && 'UTF-8' !== strtoupper($charset) && 'X-UNKNOWN' !== strtoupper($charset) ?
 										mb_convert_encoding($body, 'UTF-8', $charset) : mb_convert_encoding($body, 'UTF-8', 'auto');
-
 									$body = l($body);
-
 									if (!filter_var($from, FILTER_CALLBACK, ['options' => 'b']))
 									{
 										echo '<p class=blocked>', $from, ' からのメールは次の読み込み時に削除されます。 <a class=blocked download="'. $from, '.txt" href="data:application/octet-stream;base64,', base64_encode(html_entity_decode($header. $body)), '">保存</a></p>';
@@ -307,7 +305,7 @@ echo
 												}
 												elseif (0 === $structure->parts[$h]->encoding && is_array($structure->parts[$h]->parameters))
 												{
-													$body = str_replace(">\r\n<", '><', mb_convert_encoding($attachment, 'UTF-8', $structure->parts[$h]->parameters[0]->value));
+													$body = str_replace(">\r\n<", '><', mb_convert_encoding($attachment, 'UTF-8', $structure->parts[$h]->parameters[0]->value??'auto'));
 													$body = str_replace("\r\n", '&#10;', trim(strip_tags($body, ['a', 'br'])));
 												}
 											}
