@@ -1,4 +1,4 @@
-# AltTray Plus 2.1
+# AltTray Plus 3
 
 ## 概要
 
@@ -14,7 +14,7 @@
 
 ## 動作および推奨環境
 
-* XAMPP for Linux / Docker ([lapi](https://github.com/DOlDNa/lapi)) 
+* Docker ([lapi](https://github.com/DOlDNa/lapi)) 
 * Web Notifications API 対応ブラウザ
 
 

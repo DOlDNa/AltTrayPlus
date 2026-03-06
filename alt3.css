@@ -1,0 +1,534 @@
+/* =========================================
+   基本テーマ変数（色・影・トランジション）
+========================================= */
+:root {
+    --accent: #4f8cff;
+    --accent-soft: rgba(79, 140, 255, 0.25);
+    --border: #2a2f3a;
+    --text: #f5f7ff;
+    --text-sub: #a3a8b8;
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+    --transition: 0.18s ease-out;
+}
+
+/* =========================================
+   全体リセット・基本設定
+========================================= */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #0e0f12;
+    color: #f3f4f6;
+    font-family: TakaoPGothic, "Noto Sans CJK JP", sans-serif;
+    font-size: 1.4rem;
+}
+
+button {
+    font-size: 1.2rem;
+    outline: none;
+}
+
+/* =========================================
+   レイアウト全体
+========================================= */
+#app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* =========================================
+   ヘッダー
+========================================= */
+#header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+#logo,
+.account-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+#config {
+    color: #f3f4f6;
+    font-size: 1rem;
+    margin-left: .5rem;
+    vertical-align: super;
+}
+
+#logo img {
+    width: 2rem;
+    vertical-align: text-top;
+}
+
+/* 検索ボックス */
+.search {
+    flex: 1;
+    background: #15171c;
+    border: 1px solid #262830;
+    color: #f3f4f6;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+/* =========================================
+   アカウント情報カード
+========================================= */
+.account {
+    background: #15171c;
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    border: 1px solid #262830;
+}
+
+.account-title {
+    margin: 0 0 12px;
+}
+
+/* =========================================
+   メール一覧
+========================================= */
+.mail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: #1b1d23;
+    border-radius: 6px;
+    margin-bottom: 6px;
+}
+
+.mail-row:hover,
+.mail-row:focus-visible {
+    background: #22242b;
+}
+
+main {
+    margin-right: auto;
+}
+
+/* 件名（クリックでモーダル表示） */
+.subject {
+    cursor: pointer;
+    flex: 1;
+    line-height: 1.8;
+}
+
+/* 差出人・日付 */
+.sender {
+    margin-right: 1rem;
+}
+
+.date,
+.sender,
+.save a {
+    color: #9ca3af;
+    display: inline-block;
+    font-size: 1.2rem;
+}
+
+/* 保存ボタン */
+.save {
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* リンク */
+a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+/* セクションフェードイン */
+section {
+    animation: a 1.5s;
+}
+
+/* 削除チェックボックス */
+.delete input,
+.body,
+.headers {
+    display: none;
+}
+
+.delete input + label {
+    cursor: pointer;
+    padding: 5px 7px;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, .8);
+    user-select: none;
+    white-space: nowrap;
+}
+
+.delete input:checked + label {
+    background-color: darkred;
+    box-shadow: inset 0px 2px 2px rgba(0, 0, 0, .8);
+    user-select: none;
+}
+
+/* 新着バッジ */
+.badge {
+    padding: 2px 6px;
+    background: dodgerblue;
+    color: #fff;
+    font-size: 1rem;
+    margin-left: .3rem;
+    border-radius: 1rem;
+    white-space: nowrap;
+}
+
+/* エラー表示 */
+.error {
+    color: #ff6b6b;
+}
+
+/* 添付ファイル表示 */
+.attach {
+    color: #bbb;
+    margin-bottom: 1rem;
+}
+
+/* =========================================
+   削除ボタン（右上固定）
+========================================= */
+#remove {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background-color: darkred;
+    color: #ffffff;
+    border: none;
+    border-radius: 2rem;
+    padding: 0.5em 1em;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#remove:hover,
+#remove:focus-visible {
+    background-color: #d32f2f;
+}
+
+#remove:active {
+    background-color: #c62828;
+}
+
+#remove.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* =========================================
+   通知ボタン（画面下）
+========================================= */
+#notify-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    padding: 14px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: dodgerblue;
+    color: white;
+    cursor: pointer;
+    opacity: 0;
+    animation: floatUp 0.8s ease-out forwards;
+    z-index: 9999;
+}
+
+#notify-btn.fade-out {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+#notify-btn:hover {
+    background: #4a90e2;
+}
+
+/* =========================================
+   モーダル（メール詳細）
+========================================= */
+.modal {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(14px);
+}
+
+.modal.show {
+    display: block;
+    opacity: 1;
+}
+
+.modal-content {
+    background: #2E2F37;
+    margin: 5% auto;
+    width: 85%;
+    max-height: 90vh;
+    max-width: 80vw;
+    animation: a 0.3s ease;
+    outline: 0;
+}
+
+/* モーダルヘッダー（タブ + 閉じるボタン） */
+.modal-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 閉じるボタン */
+.close {
+    border: none;
+    cursor: pointer;
+    color: #844544;
+    background: #FF5449;
+    padding: 8px 16px;
+}
+
+.close:hover,
+.close:focus-visible {
+    color: #fff;
+    background: #844544;
+}
+
+/* =========================================
+   タブ UI
+========================================= */
+.tab-btn {
+    flex: 1;
+    padding: 8px 16px;
+    border: none;
+    background: #333;
+    color: #ccc;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.tab-btn:hover,
+.tab-btn:focus-visible {
+    background: #444;
+}
+
+.tab-btn.active {
+    background: #4285f4;
+    color: #fff;
+}
+
+/* ダウンロードタブのテキスト折返し防止 */
+.tab-btn:nth-child(3) {
+    overflow: hidden;
+    text-wrap-mode: nowrap;
+}
+
+/* タブ内容 */
+.tab-content {
+    display: none;
+    padding: 2rem;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-family: TakaoGothic, "Noto Sans Mono CJK JP", monospace;
+    line-height: 1.8;
+    overflow-y: auto;
+    outline: 0;
+    max-height: calc(90vh - 100px);
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* =========================================
+   モーダル内フォーム
+========================================= */
+address {
+    display: block;
+    margin: 2rem;
+}
+
+.url {
+    background: none;
+    border: none !important;
+    color: inherit;
+    outline: 0;
+}
+
+.modal input[type=text],
+select {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: thin solid;
+    font-size: unset;
+    width: 100%;
+}
+
+fieldset {
+    border: none;
+}
+
+.modal-content section {
+    margin: 2rem;
+}
+
+.modal-content section h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 12px;
+}
+
+/* =========================================
+   アカウント設定モーダル専用デザイン
+========================================= */
+#account .modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(14px);
+}
+
+#account .modal-content {
+    background: linear-gradient(145deg, #151823, #10121a);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 24px 26px 20px;
+    overflow-y: auto;
+}
+
+#account section {
+    z-index: 1;
+    margin-bottom: 20px;
+}
+
+#account .section-account .account-title {
+    margin: 0 0 14px;
+    font-size: 1.1rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-sub);
+}
+
+#account .section-account .fieldset-account {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 16px 10px;
+    background:
+        radial-gradient(circle at top left, rgba(79, 140, 255, 0.08), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.7), #10121a);
+}
+
+/* 入力欄 */
+#account .input-text,
+#account .select-protocol {
+    width: 100%;
+    margin-bottom: .5rem;
+    padding: .5rem 1rem;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: rgba(5, 7, 12, 0.9);
+    color: var(--text);
+    outline: none;
+    transition: var(--transition);
+}
+
+#account .input-text:focus,
+#account .select-protocol:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent-soft);
+    background: #0b0e16;
+    transform: translateY(-1px);
+}
+
+/* ボタン */
+#account .section-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+#account .btn {
+    border-radius: 100px;
+    padding: .5rem 1.5rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: var(--transition);
+}
+
+#account .btn-cancel {
+    background: transparent;
+    color: var(--text-sub);
+    border-color: var(--border);
+}
+
+#account .btn-cancel:hover,
+#account .btn-cancel:focus {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text);
+    border-color: var(--text);
+}
+
+#account .btn-submit {
+    background: linear-gradient(135deg, #4f8cff, #7b5cff);
+    color: #ffffff;
+}
+
+#account .btn-submit:hover,
+#account .btn-submit:focus {
+    box-shadow: 0 4px 12px rgba(79, 140, 255, 0.4);
+}
+
+#account .btn-cancel,
+#account .btn-submit {
+    transition: all 0.25s ease;
+}
+
+/* =========================================
+   アニメーション
+========================================= */
+@keyframes a {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes floatUp {
+    from {
+        transform: translateX(-50%) translateY(40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
