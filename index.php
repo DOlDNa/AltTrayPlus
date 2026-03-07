@@ -174,7 +174,7 @@ else
 					'/<a[^>]*href\s*=\s*[\'"]([^\'"]+)[\'"][^>]*>(.*?)<\/a>/is',
 					function ($m) use (&$replace_count, $hid) {
 						$replace_count++;
-						return '<address><cite>'. $m[2]. '</cite><input name="url-'. $hid. '-'. $replace_count. '" type="text" value="'. $m[1]. '" readonly class="url" onclick="this.select()"></address>';
+						return '<address><cite>'. strip_tags($m[2]). '</cite><input name="url-'. $hid. '-'. $replace_count. '" type="text" value="'. strip_tags($m[1]). '" readonly class="url" onclick="this.select()"></address>';
 					},
 					$body
 				);
