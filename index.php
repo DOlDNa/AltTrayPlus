@@ -178,6 +178,7 @@ else
 					},
 					$body
 				);
+				$body = preg_replace('/<br\s*\/?>/i', PHP_EOL, $body);
 				$body = str_replace(["\r\n", PHP_EOL], '&#10;', trim($body));
 				$body = preg_replace("/([\s\t]*&#10;){3,}/", '&#10;', $body);
 				echo $body;
