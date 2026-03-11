@@ -9,22 +9,19 @@ error_reporting(0);
 $CONFIG_FILE = __DIR__. '/.poptrayrc';
 $BLACKLIST_FILE = __DIR__. '/blacklist.txt';
 $REFRESH_MS = 9e5; // 15min
-$TIMEOUT = 5;
+$TIMEOUT = 1;
 
-if (strcasecmp($_SERVER['REQUEST_METHOD'], 'POST') === 0)
-{
-	if (!isset($_POST['delete']) && $a = filter_input_array(INPUT_POST, [
-	'title' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags', 'flags' => FILTER_REQUIRE_ARRAY],
-	'name' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags', 'flags' => FILTER_REQUIRE_ARRAY],
-	'user' => ['filter' => FILTER_CALLBACK, 'options' => 'e', 'flags' => FILTER_REQUIRE_ARRAY+FILTER_FLAG_EMAIL_UNICODE],
-	'host' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags', 'flags' => FILTER_REQUIRE_ARRAY],
-	'port' => ['filter' => FILTER_SANITIZE_NUMBER_INT, 'flags' => FILTER_REQUIRE_ARRAY],
-	'password' => ['filter' => FILTER_DEFAULT, 'flags' => FILTER_REQUIRE_ARRAY],
-	'protocol' => ['filter' => FILTER_DEFAULT, 'flags' => FILTER_REQUIRE_ARRAY],
-	]))
-	{
-		for ($l=0, $e=count($a['name']); $l < $e; ++$l)
-		{
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$_POST['delete']) {
+	if ($a = filter_input_array(INPUT_POST, [
+		'title' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags', 'flags' => FILTER_REQUIRE_ARRAY],
+		'name' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags', 'flags' => FILTER_REQUIRE_ARRAY],
+		'user' => ['filter' => FILTER_CALLBACK, 'options' => 'e', 'flags' => FILTER_REQUIRE_ARRAY+FILTER_FLAG_EMAIL_UNICODE],
+		'host' => ['filter' => FILTER_CALLBACK, 'options' => 'strip_tags', 'flags' => FILTER_REQUIRE_ARRAY],
+		'port' => ['filter' => FILTER_SANITIZE_NUMBER_INT, 'flags' => FILTER_REQUIRE_ARRAY],
+		'password' => ['filter' => FILTER_DEFAULT, 'flags' => FILTER_REQUIRE_ARRAY],
+		'protocol' => ['filter' => FILTER_DEFAULT, 'flags' => FILTER_REQUIRE_ARRAY],
+	])) {
+		for ($l=0, $e=count($a['name']); $l < $e; ++$l) {
 			if ($a['name'][$l] && $a['host'][$l] && $a['port'][$l] && $a['user'][$l] && $a['protocol'][$l])
 			$alt_accounts[] =
 			$a['title'][$l]. PHP_EOL.
@@ -43,15 +40,85 @@ if (strcasecmp($_SERVER['REQUEST_METHOD'], 'POST') === 0)
 // =========================
 // Helpers
 // =========================
+function render_account_html($acc) {
+	echo
+				'<section class="account">',
+					'<h2 class="account-title">', ($hid = h($acc['id'])), '</h2>';
+	if ($acc['error']) {
+		echo
+					'<div class="error">', h($acc['error']), '</div>';
+	}
+	elseif (empty($acc['messages'])) {
+		echo
+					'<div></div>';
+	}
+	else {
+		foreach ($acc['messages'] as $m) {
+			$rowId = 'msg_'. $hid. '_'. $m['id'];
+			echo
+					'<div class="mail-row">',
+						'<div class="delete">',
+							'<input type="checkbox" name="delete[', $hid, ':', $m['id'], ']" value="1" id="', $hid, '-', $m['id'], '">',
+							'<label for="', $hid, '-', $m['id'], '" tabindex="1">削除</label>',
+						'</div>',
+						'<main>',
+							'<div class="subject" data-target="', $rowId, '" tabindex="0">', h($m['subject']);
+			if (!empty($m['attachments'])) {
+				echo
+								'<sup class="badge">添付 ', count($m['attachments']), '</sup>';
+			}
+			echo
+							'</div>',
+							'<span class="sender">', h($m['from']), '</span>',
+							'<wbr>',
+							'<time class="date">', date('Y年n月j日 H時i分s秒', h($m['date'])), '</time>',
+						'</main>',
+						'<div class="save" tabindex="0">📥<br><small>', h(s_bytes($m['size'])), '</small></div>',
+						'<div id="', $rowId, '" class="body', ($m['kind'] === 'html' ? ' html' : ''), '">';
+			$body = $body_orig = $m['body'];
+			$body = preg_replace('/(<style[^>]*>.*?<\/style>)/is', '', $body);
+			$body = strip_tags($body, ['a', 'br']);
+			$replace_count = 0;
+			$body = preg_replace_callback(
+				'/<a[^>]*href\s*=\s*[\'"]([^\'"]+)[\'"][^>]*>(.*?)<\/a>/is',
+				function ($m) use (&$replace_count, $hid) {
+					$replace_count++;
+					return
+							'<address>'.
+								'<cite>'. strip_tags($m[2]). '</cite>'.
+								'<input name="url-'. $hid. '-'. $replace_count. '" type="text" value="'. strip_tags($m[1]). '" readonly class="url" onclick="this.select()">'.
+							'</address>';
+				},
+				$body
+			);
+			$body = preg_replace('/<br\s*\/?>/i', PHP_EOL, $body);
+			$body = str_replace(["\r\n", PHP_EOL], '&#10;', trim($body));
+			$body = preg_replace("/([\s\t]*&#10;){3,}/", '&#10;', $body);
+			echo $body;
+			echo
+						'</div>',
+						'<div id="', $rowId, '_headers" class="headers">';
+			foreach ($m['header'] as $k => $v) {
+				echo
+							h($k. ': '. $v), '&#10;';
+			}
+			$json_header = json_encode($m['header'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+			echo
+						'</div>',
+					'</div>',
+					'<span id="', $rowId, '_header_body" data-base64="', base64_encode($json_header. PHP_EOL. $body_orig), '"></span>';
+		}
+	}
+	echo
+				'</section>';
+}
 
 function h($s) {
 	return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
-function e($e)
-{
+function e($e) {
 	if (filter_var($e, FILTER_VALIDATE_EMAIL)) return $e;
-	elseif (false !== strpos($e, '@'))
-	{
+	elseif (false !== strpos($e, '@')) {
 		$ex = explode('@', $e);
 		return filter_var(idn_to_ascii($ex[0]). '@'. idn_to_ascii($ex[1]), FILTER_SANITIZE_EMAIL);
 	}
@@ -61,8 +128,7 @@ function s_bytes($bytes) {
 	if ($bytes > 1024) return sprintf('%.1f KB', $bytes / 1024);
 	return $bytes. ' B';
 }
-function f(int $i)
-{
+function f(int $i) {
 	if (is_file($rc = '.poptrayrc') && is_readable($rc)) $ini = parse_ini_file($rc, true);
 	if (isset($accounts[$i])) $ini_str = parse_ini_string($accounts[$i], true);
 	$inis = $ini['account'.$i]['protocol'] ?? $ini_str['account'. $i]['protocol'] ?? '';
@@ -76,7 +142,7 @@ function f(int $i)
 		'<input class="input-text" name=password[] type=text placeholder="パスワード: '. (isset($ini['account'. $i]['passwd']) ? '変更時のみ入力"' : 'xxxxxxxx"'). '>'.
 		'<select class="select-protocol" name=protocol[]>'.
 			'<option value="POP3 SSL"'. ('POP3 SSL' !== $inis ? '' : ' selected'). '>プロトコル: POP3 SSL （デフォルト）</option>'.
-			'<option value="POP3"'. ('POP3' !== $inis ? '' : ' selected'). '>POP3</option>'.
+			'<option value="TLS"'. ('TLS' !== $inis ? '' : ' selected'). '>TLS</option>'.
 		'</select>'.
 	'</fieldset>';
 }
@@ -91,7 +157,6 @@ function load_blacklist($file) {
 	}
 	return $out;
 }
-
 function is_blacklisted($email, $blacklist) {
 	foreach ($blacklist as $pat) {
 		if (@preg_match($pat, $email)) {
@@ -116,7 +181,6 @@ class Pop3Client {
 	public $timeout;
 	public $fp;
 	public $id;
-
 	public function __construct($id, $host, $port, $user, $pass, $ssl = true, $timeout = 5) {
 		$this->id = $id;
 		$this->host = $host;
@@ -126,9 +190,8 @@ class Pop3Client {
 		$this->ssl = $ssl;
 		$this->timeout = $timeout;
 	}
-
 	public function connect() {
-		$proto = $this->ssl ? 'ssl://' : '';
+		$proto = $this->ssl ? 'ssl://' : 'tls://';
 		$errno = 0;
 		$errstr = '';
 		$this->fp = @stream_socket_client(
@@ -147,7 +210,6 @@ class Pop3Client {
 			throw new Exception("Server rejected: $greet");
 		}
 	}
-
 	public function cmd($cmd, $expectOk = true) {
 		$this->writeLine($cmd);
 		$resp = $this->readLine();
@@ -156,11 +218,9 @@ class Pop3Client {
 		}
 		return $resp;
 	}
-
 	public function writeLine($line) {
 		fwrite($this->fp, $line. "\r\n");
 	}
-
 	public function readLine() {
 		$line = fgets($this->fp);
 		if ($line === false) {
@@ -168,12 +228,10 @@ class Pop3Client {
 		}
 		return rtrim($line, "\r\n");
 	}
-
 	public function login() {
 		$this->cmd("USER ". $this->user);
 		$this->cmd("PASS ". $this->pass);
 	}
-
 	public function stat() {
 		$resp = $this->cmd("STAT");
 		$parts = explode(' ', $resp);
@@ -181,7 +239,6 @@ class Pop3Client {
 		$size = isset($parts[2]) ? (int)$parts[2] : 0;
 		return [$count, $size];
 	}
-
 	public function listMessages() {
 		$this->cmd("LIST");
 		$list = [];
@@ -195,7 +252,6 @@ class Pop3Client {
 		}
 		return $list;
 	}
-
 	public function retr($id) {
 		$this->cmd("RETR $id");
 		$data = '';
@@ -211,11 +267,9 @@ class Pop3Client {
 		}
 		return $data;
 	}
-
 	public function dele($id) {
 		$this->cmd("DELE $id");
 	}
-
 	public function quit() {
 		if ($this->fp) {
 			$this->writeLine("QUIT");
@@ -238,13 +292,11 @@ class MimePart {
 	public $encoding = '7bit';
 	public $filename = null;
 	public $isAttachment = false;
-
 	public function __construct($headers = [], $body = '') {
 		$this->headers = $headers;
 		$this->body = $body;
 		$this->parseHeaders();
 	}
-
 	protected function parseHeaders() {
 		$ct = $this->getHeader('content-type');
 		if ($ct) {
@@ -259,7 +311,6 @@ class MimePart {
 			$this->parseContentDisposition($cd);
 		}
 	}
-
 	public function getHeader($name) {
 		$lname = strtolower($name);
 		foreach ($this->headers as $k => $v) {
@@ -267,7 +318,6 @@ class MimePart {
 		}
 		return null;
 	}
-
 	protected function parseContentType($ct) {
 		$parts = explode(';', $ct);
 		$this->contentType = strtolower(trim(array_shift($parts)));
@@ -281,12 +331,10 @@ class MimePart {
 				} elseif ($k === 'name') {
 					$this->filename = $this->decodeHeader($v);
 				} elseif ($k === 'boundary') {
-
 				}
 			}
 		}
 	}
-
 	protected function parseContentDisposition($cd) {
 		$parts = explode(';', $cd);
 		$disp = strtolower(trim(array_shift($parts)));
@@ -304,7 +352,6 @@ class MimePart {
 			}
 		}
 	}
-
 	public function decodeBody() {
 		$b = $this->body;
 		switch ($this->encoding) {
@@ -315,7 +362,6 @@ class MimePart {
 				$b = quoted_printable_decode($b);
 				break;
 			default:
-				// 7bit, 8bit, binary
 				break;
 		}
 		if ($this->charset && strtoupper($this->charset) !== 'UTF-8') {
@@ -323,14 +369,11 @@ class MimePart {
 		}
 		return $b;
 	}
-
 	public function decodeHeader($str) {
-		// RFC2047
 		$decoded = mb_decode_mimeheader($str);
 		return $decoded;
 	}
 }
-
 function parse_raw_message($raw) {
 	$raw = str_replace("\r\n", "\n", $raw);
 	$raw = str_replace("\r", "\n", $raw);
@@ -362,12 +405,10 @@ function parse_raw_message($raw) {
 	if ($currentName !== '') {
 		$headers[$currentName] = $current;
 	}
-
 	$root = new MimePart($headers, $bodyText);
 	parse_multipart_recursive($root);
 	return $root;
 }
-
 function parse_multipart_recursive(MimePart $part) {
 	if (strpos($part->contentType, 'multipart/') !== 0) {
 		return;
@@ -389,7 +430,6 @@ function parse_multipart_recursive(MimePart $part) {
 		}
 	}
 	if (!$boundary) return;
-
 	$body = $part->body;
 	$body = str_replace("\r\n", "\n", $body);
 	$segments = preg_split('/\n--'. preg_quote($boundary, '/'). '(--)?\s*/', "\n". $body);
@@ -516,11 +556,9 @@ function load_accounts($file) {
 
 $deleteRequests = [];
 $delete = filter_input(INPUT_POST, 'delete', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-if (!empty($delete))
-{
+if (!empty($delete)) {
 	ob_start();
-    foreach ($delete as $key => $val)
-    {
+	foreach ($delete as $key => $val) {
 		if (!$val) continue;
 		if (strpos($key, ':') !== false) {
 			list($aid, $mid) = explode(':', $key, 2);

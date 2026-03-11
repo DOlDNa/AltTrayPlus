@@ -24,6 +24,7 @@ if (filter_has_var(INPUT_GET, 'config'))
 				'<div id="account">',
 					'<div id="modal" class="modal show">',
 						'<div class="modal-content" autofocus>';
+	ob_flush();
 	for ($i = 0, $c = count($accounts); $i < $c; ++$i)
 	{
 		echo
@@ -34,7 +35,7 @@ if (filter_has_var(INPUT_GET, 'config'))
 							'<section class="section-account"><h2 class="account-title">[account', $i, ']</h2>', f($i), '</section>',
 							'<section class="section-buttons">',
 								'<button class="btn btn-cancel" onclick="location.href=\'./\'" accesskey="c">キャンセル</button>',
-								'<button class="btn btn-submit" type=submit accesskey="s">送信</button>',
+								'<button class="btn btn-submit" type=submit accesskey="s">保存</button>',
 							'</section>',
 						'</div>',
 					'</div>',
@@ -46,10 +47,11 @@ if (filter_has_var(INPUT_GET, 'config'))
 }
 else
 {
-	$results = [];
 	$count = $total = 0;
 	foreach ($accounts as $acc) {
 		$id = $acc['id'];
+		echo "<samp class=\"typewriter dots check$id\">Checking $id</samp>";
+		ob_flush();
 		$res = [
 			'id' => $id,
 			'server' => $acc['server'],
@@ -103,102 +105,14 @@ else
 					'header' => $header,
 				];
 			}
-			usort($res['messages'], function($a, $b) { return $b['date'] <=> $a['date']; });
+			usort($res['messages'], fn($a, $b) => $b['date'] <=> $a['date']);
 			$client->quit();
 		} catch (Exception $e) {
 			$res['error'] = $e->getMessage();
 		}
 		$total += $count;
-		$results[] = $res;
-	}
-	foreach ($results as $acc)
-	{
-		echo
-				'<section class="account">',
-					'<h2 class="account-title">', ($hid = h($acc['id'])), '</h2>';
-		if ($acc['error'])
-		{
-			echo
-					'<div class="error">', h($acc['error']), '</div>';
-		}
-		elseif (empty($acc['messages']))
-		{
-			echo
-					'<div></div>';
-		}
-		else
-		{
-			foreach ($acc['messages'] as $m)
-			{
-				$rowId = 'msg_'. $hid. '_'. $m['id'];
-				echo
-					'<div class="mail-row">',
-						'<div class="delete">',
-							'<input type="checkbox" name="delete[', $hid, ':', $m['id'], ']" value="1" id="', $hid, '-', $m['id'], '">',
-							'<label for="', $hid, '-', $m['id'], '" tabindex="1">削除</label>',
-						'</div>',
-						'<main>',
-							'<div class="subject" data-target="', $rowId, '" tabindex="0">', h($m['subject']);
-				if (!empty($m['attachments']))
-				{
-					echo
-								'<sup class="badge">添付 ', count($m['attachments']), '</sup>';
-				}
-				echo
-							'</div>',
-							'<span class="sender">', h($m['from']), '</span>',
-							'<wbr>',
-							'<time class="date">', date('Y年n月j日 H時i分s秒', h($m['date'])), '</time>',
-						'</main>',
-						'<div class="save" tabindex="0">📥<br><small>', h(s_bytes($m['size'])), '</small></div>',
-						'<div id="', $rowId, '" class="body', ($m['kind'] === 'html' ? ' html' : ''), '">';
-				if (!empty($m['attachments']))
-				{
-					echo
-							'<aside class="attach">添付:';
-					foreach ($m['attachments'] as $i => $a)
-					{
-						$fname = $a['filename'] ?: ('attachment-'. ($i+1));
-						$b64 = base64_encode($a['data']);
-						echo
-								'<a href="data:', h($a['contentType']), ';base64,', $b64, '" download="', ($fname), '">', h($fname), '</a> (', h($a['contentType']), ', ', h(s_bytes(strlen($a['data']))), ')';
-					}
-					echo
-							'</aside>';
-				}
-				$body = $body_orig = $m['body'];
-				$body = preg_replace('/(<style[^>]*>.*?<\/style>)/is', '', $body);
-				$body = strip_tags($body, ['a', 'br']);
-				$replace_count = 0;
-				$body = preg_replace_callback(
-					'/<a[^>]*href\s*=\s*[\'"]([^\'"]+)[\'"][^>]*>(.*?)<\/a>/is',
-					function ($m) use (&$replace_count, $hid) {
-						$replace_count++;
-						return '<address><cite>'. strip_tags($m[2]). '</cite><input name="url-'. $hid. '-'. $replace_count. '" type="text" value="'. strip_tags($m[1]). '" readonly class="url" onclick="this.select()"></address>';
-					},
-					$body
-				);
-				$body = preg_replace('/<br\s*\/?>/i', PHP_EOL, $body);
-				$body = str_replace(["\r\n", PHP_EOL], '&#10;', trim($body));
-				$body = preg_replace("/([\s\t]*&#10;){3,}/", '&#10;', $body);
-				echo $body;
-				echo
-						'</div>',
-						'<div id="', $rowId, '_headers" class="headers">';
-				foreach ($m['header'] as $k => $v)
-				{
-					echo
-							h($k. ': '. $v), '&#10;';
-				}
-				$json_header = json_encode($m['header'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-				echo
-						'</div>',
-					'</div>',
-					'<span id="', $rowId, '_header_body" data-base64="', base64_encode($json_header. PHP_EOL. $body_orig), '"></span>';
-			}
-		}
-		echo
-				'</section>';
+		echo "<style>.check$id{display:none}</style>";
+		render_account_html($res);
 		ob_flush();
 	}
 	echo
