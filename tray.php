@@ -75,6 +75,18 @@ function render_account_html($acc) {
 						'</main>',
 						'<div class="save" tabindex="0">📥<br><small>', h(s_bytes($m['size'])), '</small></div>',
 						'<div id="', $rowId, '" class="body', ($m['kind'] === 'html' ? ' html' : ''), '">';
+			if (!empty($m['attachments'])) {
+				echo
+							'<aside class="attach">添付:';
+				foreach ($m['attachments'] as $i => $a) {
+					$fname = $a['filename'] ?: ('attachment-'. ($i+1));
+					$b64 = base64_encode($a['data']);
+					echo
+								'<a href="data:', h($a['contentType']), ';base64,', $b64, '" download="', ($fname), '">', h($fname), '</a> (', h($a['contentType']), ', ', h(s_bytes(strlen($a['data']))), ')';
+				}
+				echo
+							'</aside>';
+			}
 			$body = $body_orig = $m['body'];
 			$body = preg_replace('/(<style[^>]*>.*?<\/style>)/is', '', $body);
 			$body = strip_tags($body, ['a', 'br']);
