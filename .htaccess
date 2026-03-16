@@ -17,7 +17,3 @@ ExpiresDefault "access plus 1 weeks"
 </IfModule>
 </FilesMatch>
 </IfModule>
-<ifModule mod_deflate.c>
-SetOutputFilter DEFLATE
-SetEnvIf Request_URI \.png$ no-gzip dont-vary
-</ifModule>
