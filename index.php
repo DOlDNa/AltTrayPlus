@@ -116,7 +116,7 @@ else
 		ob_flush();
 	}
 	echo
-				'<button id="remove" type="submit" accesskey="d">チェックしたメールを削除</button>',
+				'<button id="remove" type="submit">チェックしたメールを削除</button>',
 			'</form>',
 			'<button id="notify-btn">受信通知を許可する</button>',
 		'</div>',

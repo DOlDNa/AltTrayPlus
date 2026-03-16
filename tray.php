@@ -97,8 +97,8 @@ function render_account_html($acc) {
 					$replace_count++;
 					return
 							'<address>'.
-								'<cite>'. strip_tags($m[2]). '</cite>'.
-								'<input name="url-'. $hid. '-'. $replace_count. '" type="text" value="'. strip_tags($m[1]). '" readonly class="url" onclick="this.select()">'.
+								($m[1] === $m[2] ? '' : '<cite>'. strip_tags($m[2]). '</cite>').
+								'<input name="url-'. $hid. '-'. $replace_count. '" type="text" value="'. strip_tags($m[1]). '" readonly class="url" onclick="this.select()" tabindex="0">'.
 							'</address>';
 				},
 				$body

@@ -28,8 +28,10 @@ updateButtonVisibility = () => {
 	const checkedCount = [...checkboxes].filter(cb => cb.checked).length;
 	if (checkedCount > 0) {
 		deleteBtn.classList.add('show');
+		deleteBtn.setAttribute('accesskey', 'd');
 	} else {
 		deleteBtn.classList.remove('show');
+		deleteBtn.removeAttribute('accesskey');
 	}
 };
 

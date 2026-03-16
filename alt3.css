@@ -142,8 +142,9 @@ main {
 
 /* 保存ボタン */
 .save {
-    text-align: center;
-    white-space: nowrap;
+cursor: pointer;
+text-align: center;
+white-space: nowrap;
 }
 
 /* リンク */
@@ -515,6 +516,7 @@ fieldset {
 }
 
 .typewriter {
+color: var(--text-sub);
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
