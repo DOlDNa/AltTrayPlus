@@ -62,14 +62,14 @@ function render_account_html($acc) {
 							'<label for="', $hid, '-', $m['id'], '" tabindex="1">削除</label>',
 						'</div>',
 						'<main>',
-							'<div class="subject" data-target="', $rowId, '" tabindex="0">', h($m['subject']);
+							'<div class="subject" data-target="', $rowId, '" tabindex="0">', h(preg_replace("/[\r\n]+/", '', $m['subject']));
 			if (!empty($m['attachments'])) {
 				echo
 								'<sup class="badge">添付 ', count($m['attachments']), '</sup>';
 			}
 			echo
 							'</div>',
-							'<span class="sender">', h($m['from']), '</span>',
+							'<span class="sender">', h(preg_replace("/[\r\n]+/", '', $m['from'])), '</span>',
 							'<wbr>',
 							'<time class="date">', date('Y年n月j日 H時i分s秒', h($m['date'])), '</time>',
 						'</main>',
@@ -88,8 +88,8 @@ function render_account_html($acc) {
 							'</aside>';
 			}
 			$body = $body_orig = $m['body'];
-			$body = preg_replace('/(<style[^>]*>.*?<\/style>)/is', '', $body);
-			$body = strip_tags($body, ['a', 'br']);
+			$body = preg_replace('/([ \t]+|&nbsp;)</', '<', $body);
+			$body = html_to_text($body);
 			$replace_count = 0;
 			$body = preg_replace_callback(
 				'/<a[^>]*href\s*=\s*[\'"]([^\'"]+)[\'"][^>]*>(.*?)<\/a>/is',
@@ -103,16 +103,16 @@ function render_account_html($acc) {
 				},
 				$body
 			);
-			$body = preg_replace('/<br\s*\/?>/i', PHP_EOL, $body);
-			$body = str_replace(["\r\n", PHP_EOL], '&#10;', trim($body));
-			$body = preg_replace("/([\s\t]*&#10;){3,}/", '&#10;', $body);
-			echo $body;
+			$body = preg_replace('/<br\s*\/?>|[\r\n]/i', '&#10;', $body);
+			$body = preg_replace('/(&#10;){3,}/', '&#10;&#10;', $body);
+			$body = preg_replace('/[ \t]{3,}/', ' ', $body);
+			echo strip_tags($body, ['address', 'cite', 'input']);
 			echo
 						'</div>',
 						'<div id="', $rowId, '_headers" class="headers">';
 			foreach ($m['header'] as $k => $v) {
 				echo
-							h($k. ': '. $v), '&#10;';
+							h($k. ': '. str_replace("\r\n", '&#10;', $v)), '&#10;';
 			}
 			$json_header = json_encode($m['header'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 			echo
@@ -178,6 +178,15 @@ function is_blacklisted($email, $blacklist) {
 		}
 	}
 	return false;
+}
+function html_to_text($html) {
+	$html = preg_replace('/<br\s*\/?>/i', "\n", $html);
+	$html = preg_replace('/<\/p>/i', "\n\n", $html);
+	$html = preg_replace('/<\/pre>/i', "\n\n", $html);
+	$html = preg_replace('#<(script|style)[^>]*>.*?</\1>#is', '', $html);
+	$text = strip_tags($html);
+	$text = preg_replace("/\n{3,}/", "\n\n", $text);
+	return html_entity_decode($text, ENT_QUOTES, 'UTF-8');
 }
 
 // =========================
