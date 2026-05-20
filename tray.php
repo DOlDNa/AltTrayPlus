@@ -56,10 +56,10 @@ function render_account_html($acc) {
 		foreach ($acc['messages'] as $m) {
 			$rowId = 'msg_'. $hid. '_'. $m['id'];
 			echo
-					'<div class="mail-row">',
+					'<div class="mail-row" data-id="'. $rowId. '">',
 						'<div class="delete">',
-							'<input type="checkbox" name="delete[', $hid, ':', $m['id'], ']" value="1" id="', $hid, '-', $m['id'], '">',
-							'<label for="', $hid, '-', $m['id'], '" tabindex="1">削除</label>',
+							'<input type="checkbox" name="delete[', $hid, ':', $m['id'], ']" value="1" id="', $hid, '_', $m['id'], '" data-id="', $hid, '_', $m['id'], '">',
+							'<label for="', $hid, '_', $m['id'], '" tabindex="1">削除</label>',
 						'</div>',
 						'<main>',
 							'<div class="subject" data-target="', $rowId, '" tabindex="0">', h(preg_replace("/[\r\n]+/", '', $m['subject']));
@@ -89,7 +89,7 @@ function render_account_html($acc) {
 			}
 			$body = $body_orig = $m['body'];
 			$body = preg_replace('/([ \t]+|&nbsp;)</', '<', $body);
-			$body = html_to_text($body);
+			$body = preg_replace('#<(script|style)[^>]*>.*?</\1>#is', '', $body);
 			$replace_count = 0;
 			$body = preg_replace_callback(
 				'/<a[^>]*href\s*=\s*[\'"]([^\'"]+)[\'"][^>]*>(.*?)<\/a>/is',
@@ -104,9 +104,10 @@ function render_account_html($acc) {
 				$body
 			);
 			$body = preg_replace('/<br\s*\/?>|[\r\n]/i', '&#10;', $body);
+			$body = strip_tags($body, ['address', 'cite', 'input']);
 			$body = preg_replace('/(&#10;){3,}/', '&#10;&#10;', $body);
 			$body = preg_replace('/[ \t]{3,}/', ' ', $body);
-			echo strip_tags($body, ['address', 'cite', 'input']);
+			echo $body;
 			echo
 						'</div>',
 						'<div id="', $rowId, '_headers" class="headers">';
@@ -124,7 +125,6 @@ function render_account_html($acc) {
 	echo
 				'</section>';
 }
-
 function h($s) {
 	return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
@@ -178,15 +178,6 @@ function is_blacklisted($email, $blacklist) {
 		}
 	}
 	return false;
-}
-function html_to_text($html) {
-	$html = preg_replace('/<br\s*\/?>/i', "\n", $html);
-	$html = preg_replace('/<\/p>/i', "\n\n", $html);
-	$html = preg_replace('/<\/pre>/i', "\n\n", $html);
-	$html = preg_replace('#<(script|style)[^>]*>.*?</\1>#is', '', $html);
-	$text = strip_tags($html);
-	$text = preg_replace("/\n{3,}/", "\n\n", $text);
-	return html_entity_decode($text, ENT_QUOTES, 'UTF-8');
 }
 
 // =========================
