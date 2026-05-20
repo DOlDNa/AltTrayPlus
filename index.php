@@ -122,8 +122,15 @@ else
 		'</div>',
 		'<div id="modal" class="modal" role="dialog" aria-modal="true">',
 			'<div class="modal-content">',
+				($total >= 2 ?
+				'<button class="modal-arrow left nav-prev" tabindex="0">◀</button>'.
+				'<button class="modal-arrow right nav-next" tabindex="0">▶</button>' : ''),
 				'<div class="modal-header">',
 					'<button class="tab-btn" data-tab="tab-body" tabindex="0">Body</button>',
+					'<div class="delete">',
+						'<label for="modal-delete" tabindex="0">📤 Check Delete</label>',
+						'<input id="modal-delete" type="checkbox" data-id="">',
+					'</div>',
 					'<button class="tab-btn" data-tab="tab-header" tabindex="0">Header</button>',
 					'<button class="tab-btn" data-tab="tab-body" data-action="download" tabindex="0">📥 Body+Header</button>',
 					'<button class="close" tabindex="0">&times;</button>',
