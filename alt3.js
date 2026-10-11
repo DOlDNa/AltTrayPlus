@@ -29,7 +29,6 @@ const showMail = index => {
 	document.getElementById('tab-header').textContent = header.textContent;
 	modal.dataset.source = source;
 
-	// モーダル内の削除チェックボックスと一覧側を同期
 	const listCheckbox = row.querySelector('.delete input[type="checkbox"][data-id]');
 	const modalCheckbox = modal.querySelector('.delete input[type="checkbox"][data-id]');
 
@@ -77,7 +76,6 @@ const updateButtonVisibility = () => {
 	}
 };
 
-// チェックボックスの同期（一覧・モーダル共通）
 document.addEventListener('change', e => {
 	if (!e.target.matches('input[type="checkbox"][data-id]')) return;
 	const id = e.target.dataset.id;
@@ -90,7 +88,6 @@ document.addEventListener('change', e => {
 	updateButtonVisibility();
 });
 
-// タブ切り替え
 tabButtons.forEach(btn => {
 	btn.classList.remove('active');
 
@@ -126,8 +123,7 @@ tabButtons.forEach(btn => {
 
 			const data = dataEl.dataset.base64;
 			const header = document.getElementById('tab-header').textContent;
-
-			const subject = header.replace(/\r?\n[ \t]+/g, ' ').match(/^Subject:\s*(.*)$/im)?.[1] || '';
+			const subject = header.match(/"Subject":\s+"(.*?)"/ism)?.[1] || '';
 			saveTextFile(base64DecodeUnicode(data), subject);
 		}
 	});
@@ -148,7 +144,6 @@ window.addEventListener('click', e => {
 	}
 });
 
-// 保存ボタン（一覧）
 document.querySelectorAll('.save').forEach(el => {
 	el.addEventListener('keydown', e => {
 		if (e.key === 'Enter' || e.key === ' ') e.currentTarget.click();
@@ -166,7 +161,6 @@ document.querySelectorAll('.save').forEach(el => {
 	});
 });
 
-// 件名クリックでモーダル表示
 document.querySelectorAll('.subject').forEach(el => {
 	el.setAttribute('tabindex', 0);
 
@@ -200,7 +194,6 @@ document.querySelectorAll('.subject').forEach(el => {
 	});
 });
 
-// Enter / Space で label 経由のチェックボックスをトグル
 document.addEventListener('keydown', e => {
 	if (e.key === 'Enter' || e.key === ' ') {
 		const forId = e.target.htmlFor;
@@ -208,7 +201,6 @@ document.addEventListener('keydown', e => {
 			const f = document.getElementById(forId);
 			if (f && f.type === 'checkbox') {
 				f.checked = !f.checked;
-				// data-id が付いていれば同期される
 				if (f.dataset.id) {
 					document
 						.querySelectorAll(`input[type="checkbox"][data-id="${f.dataset.id}"]`)
@@ -240,7 +232,6 @@ document.addEventListener('keydown', e => {
 	}
 });
 
-// 検索
 searchBox.addEventListener('input', () => {
 	const keyword = searchBox.value.toLowerCase();
 	const rows = document.querySelectorAll('.mail-row');
@@ -250,7 +241,6 @@ searchBox.addEventListener('input', () => {
 	});
 });
 
-// 通知関連
 if (Notification.permission === 'denied') {
 	notifyBtn.style.display = 'none';
 }
@@ -293,7 +283,6 @@ if (t > 0) {
 		});
 }
 
-// 自動リロード
 (loop = () => {
 	const r = Number(new URL(document.getElementById('altjs').src).searchParams.get('r'));
 	setTimeout(() => {

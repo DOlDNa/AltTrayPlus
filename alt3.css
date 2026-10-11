@@ -1,619 +1,742 @@
-/* =========================================
-   基本テーマ変数（色・影・トランジション）
-========================================= */
 :root {
-	--accent: #4f8cff;
-	--accent-soft: rgba(79, 140, 255, 0.25);
-	--border: #2a2f3a;
-	--text: #f5f7ff;
-	--text-sub: #a3a8b8;
-	--bg-dark: #0e0f12;
-	--bg-card: #15171c;
-	--bg-row: #1b1d23;
-	--shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
-	--transition: 0.18s ease-out;
+    --accent: #4f8cff;
+    --accent-soft: rgba(79, 140, 255, 0.2);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-focus: rgba(79, 140, 255, 0.4);
+    --text: #f3f4f6;
+    --text-sub: #9ca3af;
+    --bg-dark: #090a0f;
+    --bg-card: #12141c;
+    --bg-row: #171a23;
+    --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    --transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* =========================================
-   リセット
-========================================= */
 * {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
-	scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 body {
-	margin: 0;
-	background: var(--bg-dark);
-	color: var(--text);
-	font-family: TakaoPGothic, "Noto Sans CJK JP", sans-serif;
-	font-size: 1.4rem;
+    margin: 0;
+    background: var(--bg-dark);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, TakaoPGothic, "Noto Sans CJK JP", sans-serif;
+    font-size: 1.4rem;
+    line-height: 1.6;
 }
 
-
-/* =========================================
-   レイアウト
-========================================= */
 #app {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 20px;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 40px 24px;
 }
 
-/* =========================================
-   ヘッダー
-========================================= */
 #header {
-	display: flex;
-	align-items: center;
-	gap: 16px;
-	margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 36px;
+    animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 #logo,
 .account-title {
-	font-size: 1.4rem;
-	font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display:flex
 }
 
 #config {
-	color: #f3f4f6;
-	font-size: 1rem;
-	margin-left: .5rem;
-	vertical-align: super;
+    color: var(--text-sub);
+    font-size: 1rem;
+    margin-left: 0.5rem;
+    vertical-align: super;
 }
 
 #logo img {
-	width: 2rem;
-	vertical-align: text-top;
+    width: 2.4rem;
+    vertical-align: text-top;
+    margin-right:.5rem
 }
 
-/* 検索ボックス */
 .search {
-	flex: 1;
-	background: var(--bg-card);
-	border: 1px solid #262830;
-	color: var(--text);
-	padding: 8px 12px;
-	border-radius: 6px;
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    transition: var(--transition);
 }
 
-/* =========================================
-   アカウントカード
-========================================= */
+.search:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
 .account {
-	background: var(--bg-card);
-	padding: 16px;
-	border-radius: 10px;
-	margin-bottom: 24px;
-	border: 1px solid #262830;
+    background: var(--bg-card);
+    padding: 28px;
+    border-radius: 18px;
+    margin-bottom: 28px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .account-title {
-	margin: 0 0 12px;
+    margin: 0 0 18px;
 }
 
-/* =========================================
-   メール一覧
-========================================= */
 .mail-row {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 12px;
-	padding: 10px;
-	background: var(--bg-row);
-	border-radius: 6px;
-	margin-bottom: 6px;
-	transition: background var(--transition);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--bg-row);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    transition: var(--transition);
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
+
+.mail-row:nth-child(1) { animation-delay: 0.05s; }
+.mail-row:nth-child(2) { animation-delay: 0.1s; }
+.mail-row:nth-child(3) { animation-delay: 0.15s; }
+.mail-row:nth-child(4) { animation-delay: 0.2s; }
+.mail-row:nth-child(5) { animation-delay: 0.25s; }
 
 .mail-row:hover,
-.mail-row:focus-visible {
-	background: #22242b;
+.mail-row:focus-within {
+    background: #1c202d;
+    border-color: var(--border);
+    transform: translateY(-2px);
 }
 
 main {
-	margin-right: auto;
+    margin-right: auto;
 }
 
-/* 件名（クリックでモーダル表示） */
 .subject {
-border-bottom: thin solid rgba(0,0,0,.1);
-	cursor: pointer;
-	flex: 1;
-	line-height: 1.8;
+    border-bottom: none;
+    cursor: pointer;
+    flex: 1;
+    line-height: 1.5;
+    font-weight: 500;
+    font-size: 1.3rem;
 }
 
-/* 差出人・日付 */
 .sender {
-	margin-right: 1rem;
+    margin-right: 1rem;
 }
 
 .date,
 .sender,
 .save a {
-	color: #9ca3af;
-	display: inline-block;
-	font-size: 1.2rem;
+    color: var(--text-sub);
+    display: inline-block;
+    font-size: 1.2rem;
 }
 
-/* 保存ボタン */
 .save {
-cursor: pointer;
-text-align: center;
-white-space: nowrap;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
 }
 
-/* リンク */
+.auth-badges {
+    display: flex;
+    gap: 8px;
+    line-height: 1;
+    margin:.3rem 0;
+}
+
+.auth-badges .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+.auth-badges .badge:first-child{margin-left:0}
+
+.auth-badges .badge.pass{
+    background-color: rgba(19, 115, 51, 0.15);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.2);
+}
+
+.auth-badges .badge.fail {
+    background-color: rgba(197, 34, 31, 0.15);
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.2);
+}
+
+.auth-badges .badge.none,
+.auth-badges .badge.neutral,
+.auth-badges .badge.softfail {
+    background-color: var(--bg-card);
+    color: var(--text-sub);
+    border-color: var(--border);
+}
+
 a {
-border-bottom: thin solid rgba(0,0,0,.1);
-	color: #3b82f6;
-	text-decoration: none;
+    border-bottom: none;
+    color: var(--accent);
+    text-decoration: none;
+    transition: var(--transition);
 }
 
-/* セクションフェードイン */
+a:hover,
+a:focus-visible,
+a:focus-within,
+.subject:hover,
+.subject:focus-visible,
+.subject:focus-within {
+color: var(--accent);
+}
+
+button:hover,
+button:focus-visible,
+button:focus-within,
+.mail-row label:hover,
+.save:hover {
+    outline: none;
+}
+
 section {
-	animation: fadeIn 1.5s;
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* 削除チェックボックス */
 .delete input,
 .body,
 .headers {
-	display: none;
+    display: none;
 }
 
-.delete label{
-	cursor: pointer;
-	padding: 5px 7px;
-	user-select: none;
-transition: background var(--transition);
-	white-space: nowrap;
+.delete label {
+    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 8px;
+    user-select: none;
+    white-space: nowrap;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    font-size: 1rem;
+    outline:none
 }
 
-.delete input:checked + label,.delete:has(input:checked) {
-	background-color: darkred;
-	color: #fff;
+.delete input:checked + label,
+.delete:has(input:checked) {
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.3);
 }
 
-/* 新着バッジ */
 .badge {
-	padding: 2px 6px;
-	background: dodgerblue;
-	color: #fff;
-	font-size: 1rem;
-	margin-left: .3rem;
-	border-radius: 1rem;
-	white-space: nowrap;
+    padding: 3px 10px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+    border-radius: 9999px;
+    white-space: nowrap;
 }
 
-/* エラー表示 */
 .error {
-	color: #ff6b6b;
+    color: #f87171;
 }
 
-/* 添付ファイル表示 */
 .attach {
-	color: #bbb;
-	margin-bottom: 1rem;
+    color: var(--text-sub);
+    margin-bottom: 1rem;
+    font-size: 1rem;
 }
 
-/* =========================================
-   削除ボタン（右上固定）
-========================================= */
 #remove {
-	position: fixed;
-	right: 20px;
-	top: 20px;
-	background-color: darkred;
-	color: #ffffff;
-	border: none;
-	border-radius: 2rem;
-	padding: 0.5em 1em;
-	font-size: 1.2rem;
-	cursor: pointer;
-	opacity: 0;
-	transform: translateY(8px);
-	pointer-events: none;
-	transition: opacity 0.25s ease, transform 0.25s ease;
+    position: fixed;
+    right: 28px;
+    top: 28px;
+    background-color: #dc2626;
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    padding: 0.7rem 1.4rem;
+    font-size: 1.05rem;
+    font-weight: 500;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+    box-shadow: 0 12px 30px -5px rgba(220, 38, 38, 0.5);
+    transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.2s;
+    z-index: 1000;
 }
 
 #remove:hover,
 #remove:focus-visible {
-	background-color: #d32f2f;
+    background-color: #ef4444;
 }
 
 #remove:active {
-	background-color: #c62828;
+    background-color: #b91c1c;
 }
 
 #remove.show {
-	opacity: 1;
-	transform: translateY(0);
-	pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
-/* =========================================
-   通知ボタン
-========================================= */
 #notify-btn {
-	position: fixed;
-	bottom: 20px;
-	left: 50%;
-	transform: translateX(-50%) translateY(40px);
-	padding: 14px 24px;
-	font-size: 16px;
-	border: none;
-	border-radius: 8px;
-	background: dodgerblue;
-	color: white;
-	cursor: pointer;
-	opacity: 0;
-	animation: floatUp 0.8s ease-out forwards;
-	z-index: 9999;
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(30px);
+    padding: 14px 28px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 14px;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    opacity: 0;
+    box-shadow: 0 12px 30px -5px rgba(79, 140, 255, 0.6);
+    animation: floatUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    z-index: 9999;
 }
 
 #notify-btn.fade-out {
-	opacity: 0;
-	transition: opacity 0.4s ease;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 #notify-btn:hover {
-	background: #4a90e2;
+    background: #609aff;
 }
 
-/* =========================================
-   モーダル
-========================================= */
 .modal {
-	display: none;
-	opacity: 0;
-	transition: opacity 0.3s ease;
-	position: fixed;
-	z-index: 100;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.5);
-	backdrop-filter: blur(14px);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(10px);
 }
 
 .modal.show {
-	display: block;
-	opacity: 1;
+    display: block;
+    opacity: 1;
 }
 
 .modal-content {
-	background: #2E2F37;
-	margin: 5% auto;
-	width: 85%;
-	max-height: 90vh;
-	max-width: 80vw;
-	animation: fadeIn 0.3s ease;
-	outline: 0;
+    background: var(--bg-card);
+    margin: 3% auto;
+    width: 90%;
+    max-height: 90vh;
+    max-width: 1050px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    animation: modalScaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    outline: 0;
+    overflow: hidden;
 }
 
-/* モーダルヘッダー */
 .modal-header {
-	position: sticky;
-	top: 0;
-	z-index: 10;
-	display: flex;
-	align-items: stretch;
-	justify-content: space-between;
-}
-.delete input:checked + label,label.delete:has(input:checked) {
-	background-color: darkred!important;
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: #141720;
 }
 
-/* 閉じるボタン */
+.delete input:checked + label,
+label.delete:has(input:checked),
+.modal-header .delete:has(input:checked) {
+    background-color: rgba(220, 38, 38, 0.2) !important;
+}
+
+.mail-row .delete:hover label,
+.mail-row .delete:focus-within label {
+    background-color: rgba(220, 38, 38, 0.3);
+}
+
+.mail-row .delete input:checked + label,
+.mail-row .delete:has(input:checked) {
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.3);
+}
+
+.modal-header .delete {
+    flex: 1;
+    padding: 16px 20px;
+    border: none;
+    background: transparent;
+    color: var(--text-sub);
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 500;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.modal-header .delete label {
+    border: none;
+    background: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0;
+    color: inherit;
+}
+.modal-header .delete:hover,
+.modal-header .delete:focus-within,
+.modal-header .delete:hover label,
+.modal-header .delete:focus-within label {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+.modal-header .delete input:checked + label,
+.modal-header .delete:has(input:checked) {
+    background-color: rgba(220, 38, 38, 0.2) !important;
+    color: #f87171;
+}
+
 .close {
-	border: none;
-	cursor: pointer;
-	color: #fff;
-	background: #FF5449;
-	padding: 8px 16px;
-	transition: background var(--transition);
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    background: #ef4444;
+    padding: 10px 24px;
+    font-weight: 500;
+    font-size: 1.05rem;
+    border-radius: 0 0 10px;
+    transition: var(--transition);
 }
 
 .close:hover,
 .close:focus-visible {
-	background: #d33;
+    background: #dc2626;
 }
 
-/* =========================================
-   モーダル矢印（前後メール）
-========================================= */
 .modal-arrow {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	font-size: 32px;
-	color: #fff;
-	background: rgba(0, 0, 0, 0.4);
-	border: none;
-	padding: 12px 18px;
-	cursor: pointer;
-	z-index: 20;
-	transition: background 0.2s ease;
-	visibility: hidden; /* JS で visible にする */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #fff;
+    background: rgba(18, 20, 28, 0.85);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    visibility: hidden;
 }
 
-.modal-arrow.left { left: 10px; }
-.modal-arrow.right { right: 10px; }
+.modal-arrow.left { left: 1%; }
+.modal-arrow.right { right: 1%; }
 
 .modal-arrow:hover {
-	background: rgba(0, 0, 0, 0.7);
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-50%) scale(1.05);
 }
 
-/* 左矢印 */
-.modal-arrow.left {
-	left: 10px;
+.tab-btn,
+.modal-header .delete {
+    flex: 1;
+    padding: 16px 20px;
+    border: none;
+    background: transparent;
+    color: var(--text-sub);
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 500;
+    transition: var(--transition);
+    white-space: nowrap;
 }
-
-/* 右矢印 */
-.modal-arrow.right {
-	right: 10px;
+.modal-header .delete label:focus-visible,
+.modal-header .delete label {
+border:none;
+background:none;
+outline: none;
 }
-
-/* =========================================
-   タブ UI
-========================================= */
-.tab-btn, .modal-header .delete {
-	flex: 1;
-	padding: 8px 16px;
-	border: none;
-	border-bottom: thin solid rgba(0,0,0,.1);
-	background: #333;
-	color: #ccc;
-	cursor: pointer;
-	text-align: center;
-	transition: background 0.2s;
-	white-space: nowrap;
-}
-
 .tab-btn:hover,
 .tab-btn:focus-visible,
-.modal-header .delete:hover,
-.modal-header .delete:focus-visible,.modal-header .delete:focus-within {
-	background: #444;
+.modal-header .delete:hover label,
+.modal-header .delete:focus-visible label,
+.modal-header .delete:focus-within label {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.02)!important;
 }
 
 .tab-btn.active {
-	background: #4285f4;
-	color: #fff;
-}
-
-.tab-btn:nth-child(4) {
-	overflow: hidden;
-	text-wrap-mode: nowrap;
+    background: transparent;
+    color: var(--accent);
+    border-bottom-color: var(--accent);
 }
 
 .tab-content {
-	display: none;
-	padding: 2rem;
-	word-wrap: break-word;
-	white-space: pre-wrap;
-	font-family: TakaoGothic, "Noto Sans Mono CJK JP", monospace;
-	line-height: 1.8;
-	overflow-y: auto;
-	outline: 0;
-	max-height: calc(90vh - 100px);
+    display: none;
+    padding: 32px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    line-height: 1.8;
+    overflow-y: auto;
+    outline: 0;
+    max-height: calc(90vh - 80px);
 }
 
 .tab-content.active {
-	display: block;
+    display: block;
+    animation: fadeIn 0.3s ease forwards;
 }
-button, label{
-border-bottom: thin solid rgba(0,0,0,.1);
-	font-size: 1.2rem;
+
+button, label {
+    font-size: 1.05rem;
 }
-a:hover,
-a:focus-visible,
-button:hover,
-button:focus-visible,
-.modal-header .delete:hover,
-.modal-header .delete:focus-visible,
-.modal-header .delete:focus-within,
-.mail-row label:hover,
-.mail-row label:focus-visible,
-.subject:hover,
-.subject:focus-visible,
-.save:hover,
-.save:focus-visible {
-	border-bottom: thin solid red !important;
-	outline: none;
-}
-.modal-header label:focus-visible{outline: none;}
-/* =========================================
-   モーダル内フォーム
-========================================= */
+
 address {
-	display: block;
-	margin: 2rem;
+    display: block;
+    margin: 32px;
+    font-style: normal;
 }
 
 .url {
-	background: none;
-	border: none !important;
-	color: inherit;
-	outline: 0;
+    background: none;
+    border: none !important;
+    color: inherit;
+    outline: 0;
 }
 
 .modal input[type=text],
 select {
-	border-top: none;
-	border-left: none;
-	border-right: none;
-	border-bottom: thin solid;
-	font-size: unset;
-	width: 100%;
+    border: 1px solid var(--border);
+    background: var(--bg-row);
+    color: var(--text);
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    width: 100%;
+    transition: var(--transition);
+}
+
+.modal input[type=text]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 fieldset {
-	border: none;
+    border: none;
+    padding: 0;
+    margin: 0;
 }
 
 .modal-content section {
-	margin: 2rem;
+    margin: 32px;
 }
 
 .modal-content section h2 {
-	font-size: 1.4rem;
-	font-weight: 600;
-	margin: 0 0 12px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 16px;
 }
 
-/* =========================================
-   アカウント設定モーダル専用デザイン
-========================================= */
 #account .modal {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background: rgba(0, 0, 0, 0.55);
-	backdrop-filter: blur(14px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(10px);
 }
 
 #account .modal-content {
-	background: linear-gradient(145deg, #151823, #10121a);
-	border-radius: 18px;
-	box-shadow: var(--shadow);
-	border: 1px solid rgba(255, 255, 255, 0.04);
-	padding: 24px 26px 20px;
-	overflow-y: auto;
+    background: var(--bg-card);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    padding: 36px;
+    max-width: 560px;
+    width: 90%;
+    overflow-y: auto;
 }
 
 #account section {
-	z-index: 1;
-	margin-bottom: 20px;
+    z-index: 1;
+    margin-bottom: 24px;
 }
 
 #account .section-account .account-title {
-	margin: 0 0 14px;
-	font-size: 1.1rem;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	color: var(--text-sub);
+    margin: 0 0 14px;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-sub);
 }
 
 #account .section-account .fieldset-account {
-	border: 1px solid var(--border);
-	border-radius: 14px;
-	padding: 16px 16px 10px;
-	background:
-		radial-gradient(circle at top left, rgba(79, 140, 255, 0.08), transparent 55%),
-		radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.7), #10121a);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    background: var(--bg-row);
 }
 
-/* 入力欄 */
+
 #account .input-text,
 #account .select-protocol {
-	width: 100%;
-	margin-bottom: .5rem;
-	padding: .5rem 1rem;
-	border-radius: 9px;
-	border: 1px solid var(--border);
-	background: rgba(5, 7, 12, 0.9);
-	color: var(--text);
-	outline: none;
-	transition: var(--transition);
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    outline: none;
+    font-size: 1.05rem;
+    transition: var(--transition);
 }
 
 #account .input-text:focus,
 #account .select-protocol:focus {
-	border-color: var(--accent);
-	box-shadow: 0 0 0 1px var(--accent-soft);
-	background: #0b0e16;
-	transform: translateY(-1px);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-/* ボタン */
 #account .section-buttons {
-	display: flex;
-	justify-content: flex-end;
-	gap: 10px;
-	margin-top: 6px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 24px;
 }
 
 #account .btn {
-	border-radius: 100px;
-	padding: .5rem 1.5rem;
-	cursor: pointer;
-	border: 1px solid transparent;
-	transition: var(--transition);
+    border-radius: 10px;
+    padding: 10px 22px;
+    cursor: pointer;
+    font-size: 1.05rem;
+    font-weight: 500;
+    border: 1px solid transparent;
 }
 
 #account .btn-cancel {
-	background: transparent;
-	color: var(--text-sub);
-	border-color: var(--border);
+    background: transparent;
+    color: var(--text-sub);
+    border-color: var(--border);
 }
 
 #account .btn-cancel:hover,
 #account .btn-cancel:focus {
-	background: rgba(0, 0, 0, 0.05);
-	color: var(--text);
-	border-color: var(--text);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
 }
 
 #account .btn-submit {
-	background: linear-gradient(135deg, #4f8cff, #7b5cff);
-	color: #ffffff;
+    background: var(--accent);
+    color: #ffffff;
 }
 
 #account .btn-submit:hover,
 #account .btn-submit:focus {
-	box-shadow: 0 4px 12px rgba(79, 140, 255, 0.4);
+    background: #609aff;
+    box-shadow: 0 4px 15px rgba(79, 140, 255, 0.4);
 }
-
-#account .btn-cancel,
-#account .btn-submit {
-	transition: all 0.25s ease;
-}
-
-/* =========================================
-   アニメーション
-========================================= */
 
 .typewriter {
-color: var(--text-sub);
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  animation: typing 3s steps(30), blink .7s step-end infinite;
+    color: var(--text-sub);
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 3s steps(30), blink 0.7s step-end infinite;
 }
+
 @keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
-@keyframes blink {
-  50% { border-color: transparent; }
+    from { width: 0; }
+    to { width: 100%; }
 }
 .dots::after {
   content: "";
   animation: dots 1.2s steps(3) infinite;
 }
 @keyframes dots {
-  0%   { content: ""; }
-  33%  { content: "."; }
-  66%  { content: ".."; }
-  100% { content: "..."; }
+    0% { content: ""; }
+    33% { content: "."; }
+    66% { content: ".."; }
+    100% { content: "..."; }
 }
+
 @keyframes blink {
-  50% { border-color: transparent }
+    50% { border-color: transparent; }
 }
+
 @keyframes fadeIn {
-	from { opacity: 0 }
-	to { opacity: 1 }
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes modalScaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 @keyframes floatUp {
-	from { transform: translateX(-50%) translateY(40px); opacity: 0; }
-	to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    from {
+        transform: translateX(-50%) translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
 }
